@@ -6,12 +6,11 @@
 int** stockage(int** tab, char * nom,int* m,int* n) {
 	
 	FILE * fichier;
-	int * m,n;
 	
 	fichier = fopen(nom,"r");
 	if (fichier) {
-		&m = fgetc(fichier);
-		&n = fgetc(fichier);
+		&m = fgets(fichier);
+		&n = fgets(fichier);
 		
 		for (i=0;i<*m;i++) {
 			for (j=0;j<*n;j++) {
