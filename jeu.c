@@ -27,7 +27,7 @@ int** Stockage(int** grille, char * nom,int* m,int* n) {
 
 int ** IndiceLignes(int n,int m,int ** grille) {
     int i=0,j=0,indice=0,compteur=0;
-    int indicelign[n][m]=InitialiserTableau(n,m);
+    int **indicelign=InitialiserTableau(n,m);
 
     for (i=0;i<n;i++) {
         j=0;
@@ -51,7 +51,7 @@ int ** IndiceLignes(int n,int m,int ** grille) {
 
 int ** IndiceColonnes(int n,int m,int ** grille) {
     int i=0,j=0,indice=0,compteur=0;
-    int indicecol[m][n]=InitialiserTableau(m,n);
+    int **indicecol=InitialiserTableau(m,n);
 
     for (j=0;j<m;j++) {
         i=0;
@@ -73,14 +73,21 @@ int ** IndiceColonnes(int n,int m,int ** grille) {
     return indicecol;
 }
 
+
 int ** InitialiserTableau(int n, int m) {
 	int i,j;
-	int tab[n][m];
+	int ** tab;
+	
+	
+	tab = (int **)malloc(n * sizeof(int));
+	
 	for (i=0;i<n;i++) {
+		tab[i] = (int *)malloc(m * sizeof(int));
 		for (j=0;j<m;j++) {
 			tab[i][j]=0;
 		}
 	}
-
+	
 	return(tab);
 }
+
