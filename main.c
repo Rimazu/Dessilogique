@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <SDL2/SDL_ttf.h>
+#include "jeu.h"
 
 int main()
 {
-	
+
   SDL_Renderer * renderer;
 
   TTF_Font * font;
@@ -15,8 +16,8 @@ int main()
   SDL_Window * window;
   /* variables liees a la capture d'evenement */
   SDL_Event event;
-  
-  
+
+
   printf("Variables initialisées !\n");
 
   /* initialisation de la SDL2 */
