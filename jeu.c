@@ -34,11 +34,11 @@ int ** IndiceLignes(int n,int m,int ** grille) {
         while (j<m) {
             indice=0;
 
-            while (j<m)&&(0==grille[i][j]) {
+            while ((j<m)&&(0==grille[i][j])) {
                 j++;
             }
 
-            while (j<m)&&(1==grille[i][j]) {
+            while ((j<m)&&(1==grille[i][j])) {
                 j++;
                 indice++;
             }
@@ -50,7 +50,7 @@ int ** IndiceLignes(int n,int m,int ** grille) {
 }
 
 int ** IndiceColonnes(int n,int m,int ** grille) {
-    int i=0;,j=0,indice=0,compteur=0;
+    int i=0,j=0,indice=0,compteur=0;
     int indicecol[m][n]=InitialiserTableau(m,n);
 
     for (j=0;j<m;j++) {
@@ -58,11 +58,11 @@ int ** IndiceColonnes(int n,int m,int ** grille) {
         while (i<n) {
             indice=0;
 
-            while (i<n)&&(0==grille[i][j]) {
+            while ((i<n)&&(0==grille[i][j])) {
                 i++;
             }
 
-            while (i<n)&&(1==grille[i][j]) {
+            while ((i<n)&&(1==grille[i][j])) {
                 i++;
                 indice++;
             }
