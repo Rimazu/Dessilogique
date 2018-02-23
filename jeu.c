@@ -3,9 +3,10 @@
 #include "jeu.h"
 
 
-int** stockage(int** grille, char * nom,int* m,int* n) {
+int** Stockage(int** grille, char * nom,int* m,int* n) {
 
 	FILE * fichier;
+	int i,j;
 
 	fichier = fopen(nom,"r");
 	if (fichier) {
@@ -70,4 +71,16 @@ int ** IndiceColonnes(int n,int m,int ** grille) {
         }
     }
     return indicecol;
+}
+
+int ** InitialiserTableau(int** tab,int n, int m) {
+	int i,j;
+	
+	for (i=0;i<n;i++) {
+		for (j=0;j<m;j++) {
+			tab[i][j]=0;
+		}
+	}
+	
+	return(tab);
 }
