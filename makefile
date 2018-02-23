@@ -2,11 +2,11 @@
 
 CC=gcc
 
-CFLAGS= -g -Wall -Wextra 
+CFLAGS= -g -Wall -Wextra -ansi -pedantic -Wcomment -Wformat 
 
-LDFLAGS= -lm -lX11
+LDFLAGS= -lm -lX11 -lSDL2 -lSDL2_ttf -lSDL2_image
 
-OBJ= 
+OBJ= *.o
 
 EXEC= dessilogique
 
