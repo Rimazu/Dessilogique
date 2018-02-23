@@ -10,8 +10,8 @@ int** Stockage(int** grille, char * nom,int* m,int* n) {
 
 	fichier = fopen(nom,"r");
 	if (fichier) {
-		fscanf(fichier,&n);
-		fscanf(fichier,&m);
+		fscanf(fichier,n);
+		fscanf(fichier,m);
 
 		for (int i=0;i<*n;i++) {
 			for (int j=0;j<*m;j++) {
@@ -73,14 +73,14 @@ int ** IndiceColonnes(int n,int m,int ** grille) {
     return indicecol;
 }
 
-int ** InitialiserTableau(int** tab,int n, int m) {
+int ** InitialiserTableau(int n, int m) {
 	int i,j;
-	
+	int tab[n][m];
 	for (i=0;i<n;i++) {
 		for (j=0;j<m;j++) {
 			tab[i][j]=0;
 		}
 	}
-	
+
 	return(tab);
 }

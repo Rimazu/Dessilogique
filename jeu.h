@@ -12,4 +12,4 @@ int ** IndiceColonnes(int n,int m,int ** grille);
 int ** Stockage(int**, char *,int*,int*);
 
 //Initialise un tableau
-int ** InitialiserTableau(int **,int,int);
+int ** InitialiserTableau(int,int);
