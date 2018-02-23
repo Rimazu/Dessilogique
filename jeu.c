@@ -3,7 +3,7 @@
 #include "jeu.h"
 
 
-int** stockage(int** tab, char * nom,int* m,int* n) {
+int** stockage(int** grille, char * nom,int* m,int* n) {
 	
 	FILE * fichier;
 	
@@ -14,13 +14,13 @@ int** stockage(int** tab, char * nom,int* m,int* n) {
 		
 		for (i=0;i<*m;i++) {
 			for (j=0;j<*n;j++) {
-				fscanf(fichier, "%s", tab[i][j]);
+				fscanf(fichier, "%s", grille[i][j]);
 			}
 		}
 		fclose(fichier);
 	}
 	
-	return(tab);
+	return(grille);
 	
 }
 
