@@ -4,15 +4,19 @@ CC=gcc
 
 CFLAGS= -g -Wall -Wextra 
 
-OBJ= prog.o
+LDFLAGS= -lm -lX11
 
-EXEC=prog
+OBJ= 
+
+EXEC= dessilogique
 
 $(EXEC): $(OBJ)
-	$(CC) $^ -o $@
+	$(CC) $^ -o $@ $(LDFLAGS)
 
-prog.o: prog.h
-	$(CC) -c prog.c $(CFLAGS)
+
+%.o: %.c
+	$(CC) -c $< $(CFLAGS) 
+
 
 clean:
 	rm *.o
