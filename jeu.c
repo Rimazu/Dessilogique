@@ -3,11 +3,8 @@
 #include "jeu.h"
 
 int * IndiceLignes(int n,int m,int ** grille) {
-    int i=0;
-    int j=0;
-    int indice=0;
+    int i=0,j=0,indice=0,compteur=0;
     int indicelign[n];
-    int compteur=0;
 
     for (i=0;i<n;i++) {
         j=0;
@@ -31,11 +28,8 @@ int * IndiceLignes(int n,int m,int ** grille) {
 }
 
 int * IndiceColonnes(int n,int m,int ** grille) {
-    int i=0;
-    int j=0;
-    int indice=0;
+    int i=0;,j=0,indice=0,compteur=0;
     int indicecol[m];
-    int compteur=0;
 
     for (j=0;j<m;j++) {
         i=0;
