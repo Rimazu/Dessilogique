@@ -1,3 +1,5 @@
 Dessilogique
-ahahah
-lnm,
+while (1!=0) {
+  printf("1=0");
+  }
+  
