@@ -2,6 +2,30 @@
 #include <stdlib.h>
 #include "jeu.h"
 
+
+int** stockage(int** tab, char * nom,int* m,int* n) {
+	
+	FILE * fichier;
+	int * m,n;
+	
+	fichier = fopen(nom,"r");
+	if (fichier) {
+		&m = fgetc(fichier);
+		&n = fgetc(fichier);
+		
+		for (i=0;i<*m;i++) {
+			for (j=0;j<*n;j++) {
+				fscanf(fichier, "%s", tab[i][j]);
+			}
+		}
+		fclose(fichier);
+	}
+	
+	return(tab);
+	
+}
+
+
 int * IndiceLignes(int n,int m,int ** grille) {
     int i=0,j=0,indice=0,compteur=0;
     int indicelign[n];
