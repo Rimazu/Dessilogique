@@ -10,11 +10,11 @@ int** Stockage(int** grille, char * nom,int* m,int* n) {
 
 	fichier = fopen(nom,"r");
 	if (fichier) {
-		fscanf(fichier,n);
-		fscanf(fichier,m);
+		fscanf(fichier,&n);
+		fscanf(fichier,&m);
 
-		for (int i=0;i<*n;i++) {
-			for (int j=0;j<*m;j++) {
+		for (i=0;i<*n;i++) {
+			for (j=0;j<*m;j++) {
 				fscanf(fichier, "%s", grille[i][j]);
 			}
 		}
