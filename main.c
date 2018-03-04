@@ -9,9 +9,10 @@ int main()
 {
 
   int run = 1;
-  int type_case;
-  int ** grille;
   int n,m,i,j;
+  int type_case;
+  int ** grille = Stockage("Fichier", &n, &m);
+  
   
   SDL_Renderer * renderer;
   SDL_Rect Carre;
@@ -49,8 +50,6 @@ int main()
       SDL_Quit();
       return EXIT_FAILURE;
   }
-  
-  grille = Stockage(grille, "Fichier", &n, &m);
 
   /* ouverture de la fenetre */
   window = SDL_CreateWindow("Dessilogique",

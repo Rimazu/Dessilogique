@@ -3,15 +3,17 @@
 #include "jeu.h"
 
 
-int** Stockage(int** grille, char * nom,int* n,int* m) {
+int** Stockage(char * nom,int* n,int* m) {
 
 	FILE * fichier;
 	int i,j;
-
+	int ** grille;
 	fichier = fopen(nom,"r");
 	if (fichier) {
 		fscanf(fichier,"%d",n);
 		fscanf(fichier,"%d",m);
+		
+		grille = InitialiserTableau(*n,*m);
 
 		
 		for (i=0;i<*n;i++) {

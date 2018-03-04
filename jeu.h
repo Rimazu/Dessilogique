@@ -9,7 +9,7 @@ int ** IndiceColonnes(int n,int m,int ** grille);
 
 
 /*stocke la matrice du fichier dans un tableau*/
-int ** Stockage(int**, char *,int*,int*);
+int ** Stockage(char *,int*,int*);
 
 /*Initialise un tableau*/
 int ** InitialiserTableau(int,int);
