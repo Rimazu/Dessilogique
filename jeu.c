@@ -3,24 +3,25 @@
 #include "jeu.h"
 
 
-int** Stockage(int** grille, char * nom,int* m,int* n) {
+int** Stockage(int** grille, char * nom,int* n,int* m) {
 
 	FILE * fichier;
 	int i,j;
 
 	fichier = fopen(nom,"r");
 	if (fichier) {
-		fscanf(fichier,&n);
-		fscanf(fichier,&m);
+		fscanf(fichier,"%d",n);
+		fscanf(fichier,"%d",m);
 
+		
 		for (i=0;i<*n;i++) {
 			for (j=0;j<*m;j++) {
-				fscanf(fichier, "%s", grille[i][j]);
+				fscanf(fichier, "%d", &grille[i][j]);
+				printf("%d \t %d %d \n",grille[i][j],i,j);
 			}
 		}
 		fclose(fichier);
 	}
-	printf("\n %d \t %d", n, m);
 
 	return(grille);
 
@@ -80,7 +81,7 @@ int ** InitialiserTableau(int n, int m) {
 	int ** tab;
 	
 	
-	tab = (int **)malloc(n * sizeof(int));
+	tab = (int **)malloc(n * sizeof(int*));
 	
 	for (i=0;i<n;i++) {
 		tab[i] = (int *)malloc(m * sizeof(int));

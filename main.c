@@ -9,7 +9,7 @@ int main()
 {
 
   int run = 1;
-  
+  int type_case;
   int ** grille;
   int n,m,i,j;
   
@@ -56,7 +56,7 @@ int main()
   window = SDL_CreateWindow("Dessilogique",
                             SDL_WINDOWPOS_CENTERED,
                             SDL_WINDOWPOS_CENTERED,
-                            50*n,50*m,
+                            5+50*n,5+50*m,
                             0);
 
   if(!window){
@@ -85,15 +85,17 @@ int main()
   printf("Evenements initialisés !\n");
   
   
+  SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
+  SDL_RenderClear( renderer );
   
   
-  
-  for (i=0;i<n;i=i+50) {
-	  for (j=0;j<m;j=j+50) {
-		  SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
-		  SDL_RenderClear( renderer );
-		  Carre.x = Carre.w = i;
-		  Carre.y = Carre.h = j;
+  for (i=5;i<50*n;i=i+50) {
+	  for (j=5;j<50*m;j=j+50) {
+		  
+		  Carre.x = i;
+		  Carre.w = 45;
+		  Carre.y = j;
+		  Carre.h = 45;
 		  SDL_SetRenderDrawColor( renderer, 0, 0, 255, 255 );
 		  SDL_RenderFillRect( renderer, &Carre );
 		  SDL_RenderPresent(renderer);
@@ -124,6 +126,11 @@ int main()
 				}
 			    break;
 			case SDL_MOUSEBUTTONDOWN :
+				if ((event.button.x<=50*n) && (event.button.y <= 50*m) && (event.button.x >= 5) && (event.button.y >= 5)) {
+					
+					
+					
+				}
 				  /* ici on doit faire des choses */
 				  
 				break;
