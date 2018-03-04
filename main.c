@@ -125,8 +125,16 @@ int main()
 				}
 			    break;
 			case SDL_MOUSEBUTTONDOWN :
-				if ((event.button.x<=50*n) && (event.button.y <= 50*m) && (event.button.x >= 5) && (event.button.y >= 5)) {
-					
+				if ((event.button.x<=50*n) && (event.button.y <= 50*m) &&(event.button.x%50>5)&&(event.button.y%50>5)) {
+					Carre.x = (int)event.button.x/50 *50+5;
+					Carre.w = 45;
+					Carre.y = (int)event.button.y/50 *50+5;
+					Carre.h = 45;
+					if (event.button.button == SDL_BUTTON_LEFT) 
+						SDL_SetRenderDrawColor( renderer, 0, 255, 0, 255 );
+					else SDL_SetRenderDrawColor( renderer, 255, 255, 255, 255 );
+					SDL_RenderFillRect( renderer, &Carre );
+					SDL_RenderPresent(renderer);
 					
 					
 				}
