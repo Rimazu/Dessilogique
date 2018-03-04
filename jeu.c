@@ -20,6 +20,7 @@ int** Stockage(int** grille, char * nom,int* m,int* n) {
 		}
 		fclose(fichier);
 	}
+	printf("\n %d \t %d", n, m);
 
 	return(grille);
 

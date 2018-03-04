@@ -9,9 +9,6 @@ int main()
 {
 
   int run = 1;
-  int width = 600;
-  int height = 800;
-  
   
   int ** grille;
   int n,m,i,j;
@@ -52,12 +49,14 @@ int main()
       SDL_Quit();
       return EXIT_FAILURE;
   }
+  
+  grille = Stockage(grille, "Fichier", &n, &m);
 
   /* ouverture de la fenetre */
   window = SDL_CreateWindow("Dessilogique",
                             SDL_WINDOWPOS_CENTERED,
                             SDL_WINDOWPOS_CENTERED,
-                            width,height,
+                            50*n,50*m,
                             0);
 
   if(!window){
@@ -85,7 +84,6 @@ int main()
 
   printf("Evenements initialisés !\n");
   
-  grille = Stockage(grille, "fichier", &n, &m);
   
   
   
@@ -119,10 +117,10 @@ int main()
 						printf("appui sur la croix\n");
 						run = 0;
 						break;
-					case SDL_WINDOWEVENT_SIZE_CHANGED:
+					/*case SDL_WINDOWEVENT_SIZE_CHANGED:
 						width = event.window.data1;
 						height = event.window.data2;
-						printf("Size : %d%d\n", width, height);
+						printf("Size : %d%d\n", width, height);*/
 				}
 			    break;
 			case SDL_MOUSEBUTTONDOWN :
