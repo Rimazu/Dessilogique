@@ -3,18 +3,15 @@
 #include "jeu.h"
 
 
-int** Stockage(char * nom,int* n,int* m) {
+int ** Stocker(char * nom,int * n,int * m) {
+	int 	i,j;
+	int **	grille;
+	FILE * fichier = fopen(nom,"r");
 
-	FILE * fichier;
-	int i,j;
-	int ** grille;
-	fichier = fopen(nom,"r");
 	if (fichier) {
 		fscanf(fichier,"%d",n);
 		fscanf(fichier,"%d",m);
-
 		grille = InitialiserTableau(*n,*m);
-
 
 		for (i=0;i<*n;i++) {
 			for (j=0;j<*m;j++) {
@@ -55,95 +52,69 @@ int ** IndiceLignes(int n,int m,int ** grille) {
 }
 
 int ** IndiceColonnes(int n,int m,int ** grille) {
-    int i=0,j=0,indice=0,compteur;
-    int **indicecol=InitialiserTableau(m,n);
-
-    for (j=0;j<m;j++) {
-        i=0;
-        compteur=0;
-        while (i<n) {
-            indice=0;
-
-            while ((i<n)&&(0==grille[i][j])) {
-                i++;
-            }
-
-            while ((i<n)&&(1==grille[i][j])) {
-                i++;
-                indice++;
-            }
-            indicecol[j][compteur]=indice;
-            compteur++;
-        }
-    }
+    
     return indicecol;
 }
 
 
 int ** InitialiserTableau(int n, int m) {
-	int i,j;
-	int ** tab;
-
-
-	tab = (int **)malloc(n * sizeof(int*));
+	int 	i,j;
+	int	**	tab = (int **)malloc(n * sizeof(int*));
 
 	for (i=0;i<n;i++) {
 		tab[i] = (int *)malloc(m * sizeof(int));
+		
 		for (j=0;j<m;j++) {
-			tab[i][j]=0;
+			tab[i][j] = 0;
 		}
 	}
-
 	return(tab);
 }
 
-void AfficherM(int **C, int n,int m) {
-	int 		i,j;
+int ComparerIndices(int n, int * indiceligne, int * ligne_user) {
+	int i = 0,			/*indice parcours ligne_user*/
+		j = 0, 			/*indice parcours indiceligne*/
+		compteur = 0, 
+		erreur = 0;
+	
+	while ((!erreur)&&(i<n)) {
+		while ((i<n)&&(!ligne_user[i])) {
+			i++;
+		}
+		compteur=0;
+		while ((i<n)&&ligne_user[i]) {
+			i++;
+			compteur++;
+		}
+		if (compteur != indiceligne[j]) {
+			erreur = 1;
+		}
+		/*printf("erreurs = %d\n",(compteur != indiceligne[j]));*/
+		j++;
+	}
+	return (erreur);
+}
+
+void Afficher(int **T, int n,int m) {
+	int	i,j;
 
 	for (i=0;i<n;i++) {
 		for (j=0;j<m;j++) {
-			printf("%d ",C[i][j]);
+			printf("%d ",T[i][j]);
 		}
 		printf("\n");
+	}
+}
+
+int ** Transposer(int ** T, int n, int m) {
+	int 	i,j;
+	int **	Tt = InitialiserTableau(m,n);
+	
+	for (i=0;i<n;i++) {
+		for (j=0;j<m;j++) {
+			Tt[i][j] = T[j][i];
 		}
 	}
-
-
-
-
-	int comparer_indices(int m, int * indices, int * a_comparer)
-	{
-		int i = 0;
-		int j = 0;
-		int erreur = 0;
-		int compteur = 0;
-
-
-		while ((indices[i] != 0)&&(i<m))
-		{
-			compteur = 0;
-			while ((erreur == 0)&&(compteur != indices[i])&&(j<m))
-			{
-				if (a_comparer[j]) {
-					compteur++;
-					j++;
-				}
-				else {
-					if (compteur != 0) {
-						erreur = 1;
-					}
-					else {
-						compteur = 0;
-						j++;
-					}
-				}
-			}
-			if ((compteur != indices[i])&&(j>=m)) {
-				erreur = 1;
-			}
-			i++;
-
-		}
-		printf("%d",erreur);
-		return (erreur == 0);
-	}
+	
+	return Tt;
+}
