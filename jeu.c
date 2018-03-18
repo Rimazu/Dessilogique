@@ -19,7 +19,7 @@ int** Stockage(char * nom,int* n,int* m) {
 		for (i=0;i<*n;i++) {
 			for (j=0;j<*m;j++) {
 				fscanf(fichier, "%d", &grille[i][j]);
-				printf("%d \t %d %d \n",grille[i][j],i,j);
+				/*printf("%d \t %d %d \n",grille[i][j],i,j);*/
 			}
 		}
 		fclose(fichier);
@@ -35,6 +35,7 @@ int ** IndiceLignes(int n,int m,int ** grille) {
 
     for (i=0;i<n;i++) {
         j=0;
+        compteur=0;
         while (j<m) {
             indice=0;
 
@@ -54,11 +55,12 @@ int ** IndiceLignes(int n,int m,int ** grille) {
 }
 
 int ** IndiceColonnes(int n,int m,int ** grille) {
-    int i=0,j=0,indice=0,compteur=0;
+    int i=0,j=0,indice=0,compteur;
     int **indicecol=InitialiserTableau(m,n);
 
     for (j=0;j<m;j++) {
         i=0;
+        compteur=0;
         while (i<n) {
             indice=0;
 
@@ -94,4 +96,17 @@ int ** InitialiserTableau(int n, int m) {
 	
 	return(tab);
 }
+
+void AfficherM(int **C, int n,int m) {
+	int 		i,j;
+
+	for (i=0;i<n;i++) {
+		for (j=0;j<m;j++) {
+			printf("%d ",C[i][j]);
+		}
+		printf("\n");
+		}
+	}
+
+
 
