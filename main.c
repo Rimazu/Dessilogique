@@ -10,7 +10,7 @@ int main()
   int run = 1;
   int ix,iy,erreur;
   int red, blue, green;
-  int n,m,i,j,i2;
+  int n,m,i,j;
   int type_case;
   int ** grille = Stockage("test.txt", &n, &m);
   int ** user_grille = InitialiserTableau(n,m);
@@ -114,11 +114,9 @@ int main()
 		  switch(event.type)
 		{
 			case SDL_WINDOWEVENT:
-				printf("window event\n");
 				switch (event.window.event)
 				{
 					case SDL_WINDOWEVENT_CLOSE:
-						printf("appui sur la croix\n");
 						run = 0;
 						break;
 					/*case SDL_WINDOWEVENT_SIZE_CHANGED:
@@ -138,13 +136,13 @@ int main()
 
 
 					if (event.button.button == SDL_BUTTON_LEFT) {
-						if (user_grille[ix][iy]==1) {
-							user_grille[ix][iy] = 0;
+						if (user_grille[iy][ix]==1) {
+							user_grille[iy][ix] = 0;
 							blue = 255;
 							green = 0;
 						}
 						else {
-							user_grille[ix][iy] = 1;
+							user_grille[iy][ix] = 1;
 							green = 255;
 							blue = 0;
 						}
@@ -152,15 +150,15 @@ int main()
 
 					}
 					else {
-						if (user_grille[ix][iy] ==-1) {
+						if (user_grille[iy][ix] ==-1) {
 							red = 0;
 							green =0;
-							user_grille[ix][iy] = 0;
+							user_grille[iy][ix] = 0;
 						}
 						else {
 							red =255;
 							green = 255;
-							user_grille[ix][iy] = -1;
+							user_grille[iy][ix] = -1;
 						}
 						SDL_SetRenderDrawColor( renderer, red, green, 255, 255 );
 					}
@@ -172,14 +170,17 @@ int main()
 				}
 
         erreur = 0;
+        AfficherM(I2,n,m);
 
-        for (i2=0;i2<n;i2++)
+        for (i=0;i<n;i++)
         {
 
-          if (comparer_indices(m,I2[i2],user_grille[i2])==0) {
+
+          if (comparer_indices(m,I2[i],user_grille[i])==0) {
             erreur = 1;
           }
         }
+        printf("\n");
         if (erreur==0) {
           printf("\n\n succès !!!!\n");
           run = 0;
