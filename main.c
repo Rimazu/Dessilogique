@@ -9,9 +9,12 @@ int main()
 {
 
   int run = 1;
+  int ix,iy;
+  int red, blue, green;
   int n,m,i,j;
   int type_case;
-  int ** grille = Stockage("Fichier", &n, &m);
+  int ** grille = Stockage("test.txt", &n, &m);
+  int ** user_grille = InitialiserTableau(n,m);
   
   
   SDL_Renderer * renderer;
@@ -126,13 +129,42 @@ int main()
 			    break;
 			case SDL_MOUSEBUTTONDOWN :
 				if ((event.button.x<=50*n) && (event.button.y <= 50*m) &&(event.button.x%50>5)&&(event.button.y%50>5)) {
-					Carre.x = (int)event.button.x/50 *50+5;
+					ix = (int)event.button.x/50;
+					iy = (int)event.button.y/50;
+					Carre.x = ix*50+5;
 					Carre.w = 45;
-					Carre.y = (int)event.button.y/50 *50+5;
+					Carre.y = iy*50+5;
 					Carre.h = 45;
-					if (event.button.button == SDL_BUTTON_LEFT) 
-						SDL_SetRenderDrawColor( renderer, 0, 255, 0, 255 );
-					else SDL_SetRenderDrawColor( renderer, 255, 255, 255, 255 );
+					
+	
+					if (event.button.button == SDL_BUTTON_LEFT) { 
+						if (user_grille[ix][iy]==1) {
+							user_grille[ix][iy] = 0;
+							blue = 255;
+							green = 0;
+						}
+						else {
+							user_grille[ix][iy] = 1;	
+							green = 255;
+							blue = 0;
+						}
+						SDL_SetRenderDrawColor( renderer, 0, green, blue, 255 );
+											
+					}
+					else {
+						if (user_grille[ix][iy] ==-1) {
+							red = 0;
+							green =0;
+							user_grille[ix][iy] = 0;
+						}
+						else {
+							red =255;
+							green = 255;
+							user_grille[ix][iy] = -1;
+						}
+						SDL_SetRenderDrawColor( renderer, red, green, 255, 255 );
+					}
+				
 					SDL_RenderFillRect( renderer, &Carre );
 					SDL_RenderPresent(renderer);
 					
