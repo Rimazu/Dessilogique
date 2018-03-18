@@ -7,7 +7,6 @@
 
 int main()
 {
-
   int run = 1;
   int ix,iy;
   int red, blue, green;
@@ -15,7 +14,8 @@ int main()
   int type_case;
   int ** grille = Stockage("test.txt", &n, &m);
   int ** user_grille = InitialiserTableau(n,m);
-  
+  int ** I1= IndiceColonnes(n,m,grille);
+  int ** I2= IndiceLignes(n,m,grille);
   
   SDL_Renderer * renderer;
   SDL_Rect Carre;
@@ -144,7 +144,7 @@ int main()
 							green = 0;
 						}
 						else {
-							user_grille[ix][iy] = 1;	
+							user_grille[ix][iy] = 1;
 							green = 255;
 							blue = 0;
 						}
