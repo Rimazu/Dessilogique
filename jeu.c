@@ -111,7 +111,7 @@ void AfficherM(int **C, int n,int m) {
 
 
 
-	int comparer_ligne(int n, int m, int * indices, int * ligne_user)
+	int comparer_indices(int m, int * indices, int * a_comparer)
 	{
 		int i = 0;
 		int j = 0;
@@ -123,7 +123,7 @@ void AfficherM(int **C, int n,int m) {
 		{
 			while ((erreur == 0)&&(compteur != indices[i])&&(j<m))
 			{
-				if (ligne_user[j]) {
+				if (a_comparer)[j]) {
 					compteur++
 					j++;
 				}

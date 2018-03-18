@@ -13,3 +13,6 @@ int ** Stockage(char *,int*,int*);
 
 /*Initialise un tableau*/
 int ** InitialiserTableau(int,int);
+
+/*Compare la ligne des indices et celle du joueur (pour ligne : mettre m, pour colonne : mettre n)*/
+int comparer_indices(int m_ou_n, int * indices, int * a_comparer)
