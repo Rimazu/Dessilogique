@@ -12,10 +12,10 @@ int** Stockage(char * nom,int* n,int* m) {
 	if (fichier) {
 		fscanf(fichier,"%d",n);
 		fscanf(fichier,"%d",m);
-		
+
 		grille = InitialiserTableau(*n,*m);
 
-		
+
 		for (i=0;i<*n;i++) {
 			for (j=0;j<*m;j++) {
 				fscanf(fichier, "%d", &grille[i][j]);
@@ -83,17 +83,17 @@ int ** IndiceColonnes(int n,int m,int ** grille) {
 int ** InitialiserTableau(int n, int m) {
 	int i,j;
 	int ** tab;
-	
-	
+
+
 	tab = (int **)malloc(n * sizeof(int*));
-	
+
 	for (i=0;i<n;i++) {
 		tab[i] = (int *)malloc(m * sizeof(int));
 		for (j=0;j<m;j++) {
 			tab[i][j]=0;
 		}
 	}
-	
+
 	return(tab);
 }
 
@@ -110,3 +110,34 @@ void AfficherM(int **C, int n,int m) {
 
 
 
+
+	int comparer_ligne(int n, int m, int * indices, int * ligne_user)
+	{
+		int i = 0;
+		int j = 0;
+		int erreur = 0;
+		int compteur = 0;
+
+
+		while ((indices[i] != 0)&&(i<m))
+		{
+			while ((erreur == 0)&&(compteur != indices[i])&&(j<m))
+			{
+				if (ligne_user[j]) {
+					compteur++
+					j++;
+				}
+				else {
+					if (compteur != 0) {
+						erreur = 1;
+					}
+					else {
+						compteur = 0;
+						j++;
+					}
+				}
+			}
+			i++;
+		}
+		return(erreur==0);
+	}
