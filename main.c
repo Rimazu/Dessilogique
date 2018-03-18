@@ -8,15 +8,15 @@
 int main()
 {
   int run = 1;
-  int ix,iy;
+  int ix,iy,erreur;
   int red, blue, green;
-  int n,m,i,j;
+  int n,m,i,j,i2;
   int type_case;
   int ** grille = Stockage("test.txt", &n, &m);
   int ** user_grille = InitialiserTableau(n,m);
   int ** I1= IndiceColonnes(n,m,grille);
   int ** I2= IndiceLignes(n,m,grille);
-  
+
   SDL_Renderer * renderer;
   SDL_Rect Carre;
 
@@ -85,15 +85,15 @@ int main()
   font = TTF_OpenFont("arial.ttf",20);
 
   printf("Evenements initialisés !\n");
-  
-  
+
+
   SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
   SDL_RenderClear( renderer );
-  
-  
+
+
   for (i=5;i<50*n;i=i+50) {
 	  for (j=5;j<50*m;j=j+50) {
-		  
+
 		  Carre.x = i;
 		  Carre.w = 45;
 		  Carre.y = j;
@@ -102,15 +102,15 @@ int main()
 		  SDL_RenderFillRect( renderer, &Carre );
 		  SDL_RenderPresent(renderer);
 	  }
-	  
+
   }
-  
+
 
 
 
   while (run) {
 	  while (SDL_PollEvent(&event)) {
-		  
+
 		  switch(event.type)
 		{
 			case SDL_WINDOWEVENT:
@@ -135,9 +135,9 @@ int main()
 					Carre.w = 45;
 					Carre.y = iy*50+5;
 					Carre.h = 45;
-					
-	
-					if (event.button.button == SDL_BUTTON_LEFT) { 
+
+
+					if (event.button.button == SDL_BUTTON_LEFT) {
 						if (user_grille[ix][iy]==1) {
 							user_grille[ix][iy] = 0;
 							blue = 255;
@@ -149,7 +149,7 @@ int main()
 							blue = 0;
 						}
 						SDL_SetRenderDrawColor( renderer, 0, green, blue, 255 );
-											
+
 					}
 					else {
 						if (user_grille[ix][iy] ==-1) {
@@ -164,40 +164,37 @@ int main()
 						}
 						SDL_SetRenderDrawColor( renderer, red, green, 255, 255 );
 					}
-				
+
 					SDL_RenderFillRect( renderer, &Carre );
 					SDL_RenderPresent(renderer);
-					
-					
+
+
 				}
-				  /* ici on doit faire des choses */
-				  
+
+        erreur = 0;
+
+        for (i2=0;i2<n;i2++)
+        {
+
+          if (comparer_indices(m,I2[i2],user_grille[i2])==0) {
+            erreur = 1;
+          }
+        }
+        if (erreur==0) {
+          printf("\n\n succès !!!!\n");
+          run = 0;
+        }
+
 				break;
 			case SDL_QUIT :
 				printf("on quitte\n");
 				run = 0;
 		}
-		  
-		  
-		  
-		  
+
+
+
+
 	  }
-  /* ici on doit faire des choses */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

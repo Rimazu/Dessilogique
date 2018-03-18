@@ -123,8 +123,8 @@ void AfficherM(int **C, int n,int m) {
 		{
 			while ((erreur == 0)&&(compteur != indices[i])&&(j<m))
 			{
-				if (a_comparer)[j]) {
-					compteur++
+				if (a_comparer[j]) {
+					compteur++;
 					j++;
 				}
 				else {
@@ -139,5 +139,5 @@ void AfficherM(int **C, int n,int m) {
 			}
 			i++;
 		}
-		return(erreur==0);
+		return (erreur == 0);
 	}
