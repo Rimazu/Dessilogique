@@ -51,10 +51,11 @@ int ** IndiceLignes(int n,int m,int ** grille) {
     return indicelign;
 }
 
+/*
 int ** IndiceColonnes(int n,int m,int ** grille) {
-    
+
     return indicecol;
-}
+}*/
 
 
 int ** InitialiserTableau(int n, int m) {
@@ -63,7 +64,7 @@ int ** InitialiserTableau(int n, int m) {
 
 	for (i=0;i<n;i++) {
 		tab[i] = (int *)malloc(m * sizeof(int));
-		
+
 		for (j=0;j<m;j++) {
 			tab[i][j] = 0;
 		}
@@ -74,9 +75,9 @@ int ** InitialiserTableau(int n, int m) {
 int ComparerIndices(int n, int * indiceligne, int * ligne_user) {
 	int i = 0,			/*indice parcours ligne_user*/
 		j = 0, 			/*indice parcours indiceligne*/
-		compteur = 0, 
+		compteur = 0,
 		erreur = 0;
-	
+
 	while ((!erreur)&&(i<n)) {
 		while ((i<n)&&(!ligne_user[i])) {
 			i++;
@@ -109,12 +110,12 @@ void Afficher(int **T, int n,int m) {
 int ** Transposer(int ** T, int n, int m) {
 	int 	i,j;
 	int **	Tt = InitialiserTableau(m,n);
-	
+
 	for (i=0;i<n;i++) {
 		for (j=0;j<m;j++) {
 			Tt[i][j] = T[j][i];
 		}
 	}
-	
+
 	return Tt;
 }

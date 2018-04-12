@@ -4,8 +4,8 @@
 /*Renvoie le tableau qui contient les indices des lignes de la grille*/
 int ** IndiceLignes(int n,int m,int ** grille);
 
-/*Renvoie le tableau qui contient les indices des colonnes de la grille*/
-int ** IndiceColonnes(int n,int m,int ** grille);
+/*Renvoie le tableau qui contient les indices des colonnes de la grille
+int ** IndiceColonnes(int n,int m,int ** grille);*/
 
 
 /*Stocke la matrice du fichier dans un tableau*/
