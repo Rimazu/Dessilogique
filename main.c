@@ -29,6 +29,7 @@ int main() {
 
 	SDL_Renderer * renderer;
 	SDL_Rect Carre;
+	SDL_Rect Bouton;
 
 	TTF_Font * font;
 
@@ -115,6 +116,14 @@ int main() {
 
 	}
 
+	Bouton.x = width_interface/4;
+	Bouton.w = width_interface/2;
+	Bouton.y = height_interface/4;
+	Bouton.h = height_interface/2;
+	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+	SDL_RenderFillRect(renderer, &Bouton);
+	SDL_RenderPresent(renderer);
+
 	while (run) {
 		while (SDL_PollEvent(&event)) {
 			switch(event.type) {
@@ -127,8 +136,10 @@ int main() {
 							width = event.window.data1;
 							height = event.window.data2;
 
-							width_grille = width-width_interface;
-							height_grille = height-height_interface;
+							width_interface = 0.2 * width;
+							height_interface = 0.2 * height;
+							width_grille = 0.8 * width;
+							height_grille = 0.8 * height;
 							SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
 							SDL_RenderClear(renderer);
 							for (i=width_interface;i<=(width-width_grille/n);i=i+width_grille/n) {
@@ -148,6 +159,13 @@ int main() {
 								}
 
 							}
+							Bouton.x = width_interface/4;
+							Bouton.w = width_interface/2;
+							Bouton.y = height_interface/4;
+							Bouton.h = height_interface/2;
+							SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+							SDL_RenderFillRect(renderer, &Bouton);
+							SDL_RenderPresent(renderer);
 
 
 							SDL_RenderPresent(renderer);
@@ -188,18 +206,16 @@ int main() {
 						SDL_RenderFillRect(renderer, &Carre);
 						SDL_RenderPresent(renderer);
 					}
+					if ((event.button.x >=Bouton.x)&&(event.button.x <= Bouton.x + Bouton.w)&&(event.button.y >=Bouton.y)&&(event.button.y <=Bouton.y + Bouton.h)) {
+							erreur = VerificationSucces(n,m,I1,I2,grille_user,grille_user_transp);
+			        if (erreur==0) {
 
-				erreur = VerificationSucces(n,m,I1,I2,grille_user,grille_user_transp);
+			          printf("\n\n succès !!!!\n");
 
-        printf("\n");
+			          run = 0;
+							}
 
-        if (erreur==0) {
-
-          printf("\n\n succès !!!!\n");
-
-          run = 0;
-
-        }
+        	}
 					break;
 				case SDL_QUIT :
 					printf("on quitte\n");
