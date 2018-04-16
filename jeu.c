@@ -79,11 +79,11 @@ int ComparerIndices(int n, int * indiceligne, int * ligne_user) {
 		erreur = 0;
 
 	while ((!erreur)&&(i<n)) {
-		while ((i<n)&&(!ligne_user[i])) {
+		while ((i<n)&&(!ligne_user[i] == 1)) {
 			i++;
 		}
 		compteur=0;
-		while ((i<n)&&ligne_user[i]) {
+		while ((i<n)&&ligne_user[i] == 1) {
 			i++;
 			compteur++;
 		}
@@ -118,4 +118,27 @@ int ** Transposer(int ** T, int n, int m) {
 	}
 
 	return Tt;
+}
+
+
+int VerificationSucces(int n, int m, int ** I1, int ** I2, int ** grille_user, int ** grille_user_transp) {
+	int erreur = 0;
+	int i=0;
+	int j=0;
+
+	while ((i<n)&&erreur==0)
+	{
+		erreur = ComparerIndices(m,I2[i],grille_user[i]);
+		printf("i = %d, erreur = %d \n",i,erreur);
+		j=0;
+			while((j<m)&&erreur==0)
+			{
+				erreur = ComparerIndices(n,I1[j],grille_user_transp[j]);
+				printf("j = %d, erreur = %d \n",j,erreur);
+				j++;
+			}
+		i++;
+	}
+	return(erreur);
+
 }

@@ -17,8 +17,12 @@ int main() {
 	int **	I1= IndiceLignes(n,m,grille_transp);
 	int **	I2= IndiceLignes(n,m,grille);
 
-	int width = 5+50*n;
-	int height = 5+50*m;
+	int width = 50*n;
+	int height = 50*m;
+	int width_interface = 0.2 * width;
+	int height_interface = 0.2 * height;
+	int width_grille = 0.8 * width;
+	int height_grille = 0.8 * height;
 
 	int 	run = 1;
 	int erreur = 0;
@@ -97,13 +101,13 @@ int main() {
 	SDL_RenderClear(renderer);
 
 
-	for (i=5;i<width-5;i=i+(width-5)/n) {
-		for (j=5;j<height-5;j=j+(height-5)/m) {
+	for (i=width_interface;i<=(width-width_grille/n);i=i+width_grille/n) {
+		for (j=height_interface;j<=(height-height_grille/m);j=j+height_grille/m) {
 
 			Carre.x = i;
-			Carre.w = (width-5)/n * 0.9;
+			Carre.w = width_grille/n * 0.9;
 			Carre.y = j;
-			Carre.h = (height-5)/m * 0.9;
+			Carre.h = height_grille/m * 0.9;
 			SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 			SDL_RenderFillRect(renderer, &Carre);
 			SDL_RenderPresent(renderer);
@@ -122,18 +126,21 @@ int main() {
 						case SDL_WINDOWEVENT_SIZE_CHANGED:
 							width = event.window.data1;
 							height = event.window.data2;
+
+							width_grille = width-width_interface;
+							height_grille = height-height_interface;
 							SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
 							SDL_RenderClear(renderer);
-							for (i=5;i<width-5;i=i+(width-5)/n) {
-								for (j=5;j<height-5;j=j+(height-5)/m) {
+							for (i=width_interface;i<=(width-width_grille/n);i=i+width_grille/n) {
+								for (j=height_interface;j<=(height-height_grille/m);j=j+height_grille/m) {
 
-									ix = i/((width-5)/n);
-									iy = j/((height-5)/m);
+									ix = (i-width_interface)/(width_grille/n);
+									iy = (j-height_interface)/(height_grille/m);
 
 									Carre.x = i;
-									Carre.w = (width-5)/n * 0.9;
+									Carre.w = width_grille/n * 0.9;
 									Carre.y = j;
-									Carre.h = (height-5)/m * 0.9;
+									Carre.h = height_grille/m * 0.9;
 
 									SDL_SetRenderDrawColor(renderer, (grille_user[iy][ix] == -1)? 255:0, (grille_user[iy][ix] == 0)? 0:255, (grille_user[iy][ix] == 1)? 0:255, 255);
 									SDL_RenderFillRect(renderer, &Carre);
@@ -148,14 +155,14 @@ int main() {
 					}
 					break;
 				case SDL_MOUSEBUTTONDOWN:
-					if ((event.button.x<=(width-5))&&(event.button.y <= (height-5))&&(event.button.x%((width-5)/n)>5)&&(event.button.y%((height-5)/m)>5)) {
-						ix = (int)event.button.x/((width-5)/n);
-						iy = (int)event.button.y/((height-5)/m);
-						Carre.x = ix*((width-5)/n)+5;
-						printf("%d %d \n",Carre.x, (width-5)/n);
-						Carre.w = (width-5)/n * 0.9;
-						Carre.y = iy*((height-5)/m)+5;
-						Carre.h = (height-5)/m * 0.9;
+					if (((event.button.x-width_interface)%(width_grille/n)<=0.9*width_grille/n)&&((event.button.y-height_interface)%(height_grille/n)<=0.9*height_grille/m)&&(event.button.x<=width - (0.1 * width_grille/n))&&(event.button.y <= height - (0.1 * height_grille/m))&&(event.button.x>=width_interface)&&(event.button.y>=height_interface)) {
+						ix = (int)(event.button.x-width_interface)/(width_grille/n);
+						iy = (int)(event.button.y - height_interface)/(height_grille/m);
+						Carre.x = ix*(width_grille/n)+width_interface;
+						printf("%d %d \n",Carre.x, ix);
+						Carre.w = width_grille/n * 0.9;
+						Carre.y = iy*(height_grille/m)+height_interface;
+						Carre.h = height_grille/m * 0.9;
 
 						if (event.button.button == SDL_BUTTON_LEFT) {
 							if (grille_user[iy][ix] == 1) {
@@ -182,22 +189,7 @@ int main() {
 						SDL_RenderPresent(renderer);
 					}
 
-				erreur = 0;
-				i=0;
-				j=0;
-        Afficher(I2,n,m);
-				printf("\n\n\n");
-				Afficher(I1,n,m);
-        while ((i<n)&&erreur==0)
-        {
-          erreur = ComparerIndices(m,I2[i],grille_user[i]);
-					j=0;
-						while((j<m)&&erreur==0)
-						{
-							erreur = ComparerIndices(n,I1[j],grille_user_transp[j]);
-						}
-
-        }
+				erreur = VerificationSucces(n,m,I1,I2,grille_user,grille_user_transp);
 
         printf("\n");
 
