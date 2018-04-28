@@ -32,6 +32,8 @@ int main() {
 	SDL_Rect Bouton;
 
 	TTF_Font * font;
+	SDL_Surface	*texte=NULL,
+	SDL_Color Couleur = {255,0,255};
 
 	/* variable d'initialisation de SDL_image */
 	int flags = IMG_INIT_JPG | IMG_INIT_PNG;
@@ -42,6 +44,8 @@ int main() {
 
 
 	printf("Variables initialisées !\n");
+
+
 
 	/* initialisation de la SDL2 */
 	if(SDL_Init(SDL_INIT_VIDEO) == 1){
@@ -123,7 +127,10 @@ int main() {
 	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
 	SDL_RenderFillRect(renderer, &Bouton);
 	SDL_RenderPresent(renderer);
-
+	
+    /* Écriture du texte dans la SDL_Surface texte en mode Blended (optimal) */
+    texte = TTF_RenderText_Blended(font, "Salut les ZZ0!", couleur);
+	
 	while (run) {
 		while (SDL_PollEvent(&event)) {
 			switch(event.type) {
@@ -230,6 +237,8 @@ int main() {
 	SDL_DestroyWindow(window);
 	/* fermeture de SDL_image, SDL_ttf et SDL2 */
 	IMG_Quit();
+	TTF_CloseFont(Font);
+	SDL_FreeSurface(texte);
 	TTF_Quit();
 	SDL_Quit();
 
