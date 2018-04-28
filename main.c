@@ -14,15 +14,15 @@ int main() {
 	int **	grille_user = InitialiserTableau(n,m);
 	int ** grille_user_transp = InitialiserTableau(n,m);
 	int ** grille_transp = Transposer(grille,n,m);
-	int **	I1= IndiceLignes(n,m,grille_transp);
+	int **	I1= IndiceLignes(m,n,grille_transp);
 	int **	I2= IndiceLignes(n,m,grille);
 
 	int width = 50*n;
 	int height = 50*m;
-	int width_interface = 0.2 * width;
-	int height_interface = 0.2 * height;
-	int width_grille = 0.8 * width;
-	int height_grille = 0.8 * height;
+	int width_interface = 0.35 * width;
+	int height_interface = 0.35 * height;
+	int width_grille = 0.65 * width;
+	int height_grille = 0.65 * height;
 
 	int 	run = 1;
 	int erreur = 0;
@@ -32,8 +32,8 @@ int main() {
 	SDL_Rect Bouton;
 
 	TTF_Font * font;
-	SDL_Surface	*texte=NULL,
-	SDL_Color Couleur = {255,0,255};
+	SDL_Surface	*texte=NULL;
+	SDL_Color couleur = {255,255,255,0};
 
 	/* variable d'initialisation de SDL_image */
 	int flags = IMG_INIT_JPG | IMG_INIT_PNG;
@@ -124,13 +124,22 @@ int main() {
 	Bouton.w = width_interface/2;
 	Bouton.y = height_interface/4;
 	Bouton.h = height_interface/2;
-	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+	SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
 	SDL_RenderFillRect(renderer, &Bouton);
 	SDL_RenderPresent(renderer);
-	
-    /* Écriture du texte dans la SDL_Surface texte en mode Blended (optimal) */
-    texte = TTF_RenderText_Blended(font, "Salut les ZZ0!", couleur);
-	
+
+  /* Écriture du texte dans la SDL_Surface texte en mode Blended (optimal) */
+  texte = TTF_RenderText_Blended(font, "Salut les ZZ0!", couleur);
+	SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer,
+  texte);
+
+ 	int texW = 200;
+ 	int texH = 200;
+ 	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+ 	SDL_Rect dstrect = { 0, 0, texW, texH };
+	SDL_RenderCopy(renderer, texture, NULL, &dstrect);
+  SDL_RenderPresent(renderer);
+
 	while (run) {
 		while (SDL_PollEvent(&event)) {
 			switch(event.type) {
@@ -143,10 +152,10 @@ int main() {
 							width = event.window.data1;
 							height = event.window.data2;
 
-							width_interface = 0.2 * width;
-							height_interface = 0.2 * height;
-							width_grille = 0.8 * width;
-							height_grille = 0.8 * height;
+							width_interface = 0.35 * width;
+							height_interface = 0.35 * height;
+							width_grille = 0.65 * width;
+							height_grille = 0.65 * height;
 							SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
 							SDL_RenderClear(renderer);
 							for (i=width_interface;i<=(width-width_grille/n);i=i+width_grille/n) {
@@ -170,7 +179,7 @@ int main() {
 							Bouton.w = width_interface/2;
 							Bouton.y = height_interface/4;
 							Bouton.h = height_interface/2;
-							SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+							SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
 							SDL_RenderFillRect(renderer, &Bouton);
 							SDL_RenderPresent(renderer);
 
@@ -237,7 +246,7 @@ int main() {
 	SDL_DestroyWindow(window);
 	/* fermeture de SDL_image, SDL_ttf et SDL2 */
 	IMG_Quit();
-	TTF_CloseFont(Font);
+	TTF_CloseFont(font);
 	SDL_FreeSurface(texte);
 	TTF_Quit();
 	SDL_Quit();
