@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <SDL2/SDL.h>
+#include <string.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include "jeu.h"
@@ -8,7 +9,9 @@
 int main() {
 
 	int		n,m,i,j,ix,iy;
-	int 	type_case;
+	int 	essai=0;
+	char textEssai[80];
+	char buffer[3];
 
 	int	**	grille = Stocker("test.txt", &n, &m);
 	int **	grille_user = InitialiserTableau(n,m);
@@ -17,8 +20,8 @@ int main() {
 	int **	I1= IndiceLignes(m,n,grille_transp);
 	int **	I2= IndiceLignes(n,m,grille);
 
-	int width = 50*n;
-	int height = 50*m;
+	int width = 80*n;
+	int height = 80*m;
 	int width_interface = 0.35 * width;
 	int height_interface = 0.35 * height;
 	int width_grille = 0.65 * width;
@@ -33,7 +36,8 @@ int main() {
 
 	TTF_Font * font;
 	SDL_Surface	*texte=NULL;
-	SDL_Color couleur = {255,255,255,0};
+	SDL_Color couleurNoire = {255,255,255,0};
+	SDL_Color couleurRouge = {255,0,0,0};
 
 	/* variable d'initialisation de SDL_image */
 	int flags = IMG_INIT_JPG | IMG_INIT_PNG;
@@ -97,7 +101,7 @@ int main() {
 	printf("SDL initialisée !\n");
 
 	/*initialisation de la police*/
-	font = TTF_OpenFont("arial.ttf",20);
+	font = TTF_OpenFont("arial.ttf",14);
 
 	printf("Evenements initialisés !\n");
 
@@ -129,14 +133,17 @@ int main() {
 	SDL_RenderPresent(renderer);
 
   /* Écriture du texte dans la SDL_Surface texte en mode Blended (optimal) */
-  texte = TTF_RenderText_Blended(font, "Salut les ZZ0!", couleur);
+	sprintf(buffer,"%d",essai);
+	strcpy(textEssai,"Essai : ");
+	strcat(textEssai, buffer);
+  texte = TTF_RenderText_Blended(font, textEssai, couleurNoire);
 	SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer,
   texte);
 
- 	int texW = 200;
- 	int texH = 200;
+ 	int texW = width_interface/4;
+ 	int texH = height_interface/4;
  	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
- 	SDL_Rect dstrect = { 0, 0, texW, texH };
+ 	SDL_Rect dstrect = {width_interface/4, Bouton.y+Bouton.w, texW, texH };
 	SDL_RenderCopy(renderer, texture, NULL, &dstrect);
   SDL_RenderPresent(renderer);
 
@@ -183,7 +190,18 @@ int main() {
 							SDL_RenderFillRect(renderer, &Bouton);
 							SDL_RenderPresent(renderer);
 
+							sprintf(buffer,"%d",essai);
+							strcpy(textEssai,"Essai : ");
+							strcat(textEssai, buffer);
+							texte = TTF_RenderText_Blended(font, textEssai, couleurNoire);
+							SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer,
+							texte);
 
+							int texW = width_interface/4;
+							int texH = height_interface/4;
+							SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+							SDL_Rect dstrect = {width_interface/4, Bouton.y+Bouton.w, texW, texH };
+							SDL_RenderCopy(renderer, texture, NULL, &dstrect);
 							SDL_RenderPresent(renderer);
 							printf("Size : %d%d\n", width, height);
 					}
@@ -229,6 +247,22 @@ int main() {
 			          printf("\n\n succès !!!!\n");
 
 			          run = 0;
+							}
+							else {
+								essai++;
+								sprintf(buffer,"%d",essai);
+								strcpy(textEssai,"Essai : ");
+								strcat(textEssai, buffer);
+								texte = TTF_RenderText_Shaded(font, textEssai, couleurNoire,couleurRouge);
+								SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer,
+								texte);
+
+								int texW = width_interface/4;
+								int texH = height_interface/4;
+								SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+								SDL_Rect dstrect = {width_interface/4, Bouton.y+Bouton.w, texW, texH };
+								SDL_RenderCopy(renderer, texture, NULL, &dstrect);
+								SDL_RenderPresent(renderer);
 							}
 
         	}
