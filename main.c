@@ -101,7 +101,7 @@ int main() {
 	printf("SDL initialisée !\n");
 
 	/*initialisation de la police*/
-	font = TTF_OpenFont("arial.ttf",14);
+	font = TTF_OpenFont("arial.ttf",15);
 
 	printf("Evenements initialisés !\n");
 
@@ -124,10 +124,10 @@ int main() {
 
 	}
 
-	Bouton.x = width_interface/4;
-	Bouton.w = width_interface/2;
-	Bouton.y = height_interface/4;
-	Bouton.h = height_interface/2;
+	Bouton.x = width_interface/5;
+	Bouton.w = width_interface/3;
+	Bouton.y = height_interface/5;
+	Bouton.h = height_interface/3;
 	SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
 	SDL_RenderFillRect(renderer, &Bouton);
 	SDL_RenderPresent(renderer);
@@ -143,7 +143,7 @@ int main() {
  	int texW = width_interface/4;
  	int texH = height_interface/4;
  	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
- 	SDL_Rect dstrect = {width_interface/4, Bouton.y+Bouton.w, texW, texH };
+ 	SDL_Rect dstrect = {width_interface/6, Bouton.y+Bouton.w, texW, texH };
 	SDL_RenderCopy(renderer, texture, NULL, &dstrect);
   SDL_RenderPresent(renderer);
 
@@ -163,6 +163,7 @@ int main() {
 							height_interface = 0.35 * height;
 							width_grille = 0.65 * width;
 							height_grille = 0.65 * height;
+							font = TTF_OpenFont("arial.ttf",15*width*height/(80*n*80*m));
 							SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
 							SDL_RenderClear(renderer);
 							for (i=width_interface;i<=(width-width_grille/n);i=i+width_grille/n) {
@@ -182,10 +183,10 @@ int main() {
 								}
 
 							}
-							Bouton.x = width_interface/4;
-							Bouton.w = width_interface/2;
-							Bouton.y = height_interface/4;
-							Bouton.h = height_interface/2;
+							Bouton.x = width_interface/5;
+							Bouton.w = width_interface/3;
+							Bouton.y = height_interface/5;
+							Bouton.h = height_interface/3;
 							SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
 							SDL_RenderFillRect(renderer, &Bouton);
 							SDL_RenderPresent(renderer);
@@ -200,7 +201,7 @@ int main() {
 							int texW = width_interface/4;
 							int texH = height_interface/4;
 							SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
-							SDL_Rect dstrect = {width_interface/4, Bouton.y+Bouton.w, texW, texH };
+							SDL_Rect dstrect = {width_interface/6, Bouton.y+Bouton.h, texW, texH };
 							SDL_RenderCopy(renderer, texture, NULL, &dstrect);
 							SDL_RenderPresent(renderer);
 							printf("Size : %d%d\n", width, height);
