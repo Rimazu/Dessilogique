@@ -5,6 +5,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include "jeu.h"
+#include "affichage.h"
 
 int main() {
 
@@ -136,16 +137,7 @@ int main() {
 	sprintf(buffer,"%d",essai);
 	strcpy(textEssai,"Essai : ");
 	strcat(textEssai, buffer);
-  texte = TTF_RenderText_Blended(font, textEssai, couleurNoire);
-	SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer,
-  texte);
-
- 	int texW = width_interface/4;
- 	int texH = height_interface/4;
- 	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
- 	SDL_Rect dstrect = {width_interface/6, Bouton.y+Bouton.w, texW, texH };
-	SDL_RenderCopy(renderer, texture, NULL, &dstrect);
-  SDL_RenderPresent(renderer);
+	Affichagetexte(textEssai,renderer,font,couleurNoire,couleurRouge,width_interface/6,Bouton.y+Bouton.h,width_interface,height_interface);
 
 	while (run) {
 		while (SDL_PollEvent(&event)) {
@@ -194,16 +186,7 @@ int main() {
 							sprintf(buffer,"%d",essai);
 							strcpy(textEssai,"Essai : ");
 							strcat(textEssai, buffer);
-							texte = TTF_RenderText_Blended(font, textEssai, couleurNoire);
-							SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer,
-							texte);
-
-							int texW = width_interface/4;
-							int texH = height_interface/4;
-							SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
-							SDL_Rect dstrect = {width_interface/6, Bouton.y+Bouton.h, texW, texH };
-							SDL_RenderCopy(renderer, texture, NULL, &dstrect);
-							SDL_RenderPresent(renderer);
+							Affichagetexte(textEssai,renderer,font,couleurNoire,couleurRouge,width_interface/6,Bouton.y+Bouton.h,width_interface,height_interface);
 							printf("Size : %d%d\n", width, height);
 					}
 					break;
@@ -252,18 +235,10 @@ int main() {
 							else {
 								essai++;
 								sprintf(buffer,"%d",essai);
-								strcpy(textEssai,"Essai : ");
-								strcat(textEssai, buffer);
-								texte = TTF_RenderText_Shaded(font, textEssai, couleurNoire,couleurRouge);
-								SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer,
-								texte);
-
-								int texW = width_interface/4;
-								int texH = height_interface/4;
-								SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
-								SDL_Rect dstrect = {width_interface/4, Bouton.y+Bouton.w, texW, texH };
-								SDL_RenderCopy(renderer, texture, NULL, &dstrect);
-								SDL_RenderPresent(renderer);
+								strcpy(textEssai,"");
+								strcat(textEssai,"Essai : ");
+								strcat(textEssai,buffer);
+								Affichagetexte(textEssai,renderer,font,couleurNoire,couleurRouge,width_interface/6,Bouton.y+Bouton.h,width_interface,height_interface);
 							}
 
         	}
