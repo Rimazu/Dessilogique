@@ -15,13 +15,13 @@ int main() {
 
 	int	**	grille = Stocker("test.txt", &n, &m);
 	int **	grille_user = InitialiserTableau(n,m);
-	int ** grille_user_transp = InitialiserTableau(n,m);
+	int ** grille_user_transp = InitialiserTableau(m,n);
 	int ** grille_transp = Transposer(grille,n,m);
 	int **	I1= IndiceLignes(m,n,grille_transp);
 	int **	I2= IndiceLignes(n,m,grille);
 
-	int width = 80*n;
-	int height = 80*m;
+	int width = 80*m;
+	int height = 80*n;
 	int width_interface = 0.35 * width;
 	int height_interface = 0.35 * height;
 	int width_grille = 0.65 * width;
@@ -36,7 +36,7 @@ int main() {
 
 	TTF_Font * font;
 	SDL_Surface	*texte=NULL;
-	SDL_Color couleurNoire = {255,255,255,0};
+	SDL_Color couleurNoire = {0,0,0,0};
 	SDL_Color couleurRouge = {255,0,0,0};
 
 	/* variable d'initialisation de SDL_image */
@@ -110,13 +110,13 @@ int main() {
 	SDL_RenderClear(renderer);
 
 
-	for (i=width_interface;i<=(width-width_grille/n);i=i+width_grille/n) {
-		for (j=height_interface;j<=(height-height_grille/m);j=j+height_grille/m) {
+	for (i=height_interface;i<=(height-height_grille/n);i=i+height_grille/n) {
+		for (j=width_interface;j<=(width-width_grille/m);j=j+width_grille/m) {
 
-			Carre.x = i;
-			Carre.w = width_grille/n * 0.9;
-			Carre.y = j;
-			Carre.h = height_grille/m * 0.9;
+			Carre.x = j;
+			Carre.w = width_grille/m * 0.9;
+			Carre.y = i;
+			Carre.h = height_grille/n * 0.9;
 			SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 			SDL_RenderFillRect(renderer, &Carre);
 			SDL_RenderPresent(renderer);
@@ -166,16 +166,16 @@ int main() {
 							font = TTF_OpenFont("arial.ttf",15*width*height/(80*n*80*m));
 							SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
 							SDL_RenderClear(renderer);
-							for (i=width_interface;i<=(width-width_grille/n);i=i+width_grille/n) {
-								for (j=height_interface;j<=(height-height_grille/m);j=j+height_grille/m) {
+							for (i=height_interface;i<=(height-height_grille/n);i=i+height_grille/n) {
+								for (j=width_interface;j<=(width-width_grille/m);j=j+width_grille/m) {
 
-									ix = (i-width_interface)/(width_grille/n);
-									iy = (j-height_interface)/(height_grille/m);
+									ix = (j-width_interface)/(width_grille/m);
+									iy = (i-height_interface)/(height_grille/n);
 
-									Carre.x = i;
-									Carre.w = width_grille/n * 0.9;
-									Carre.y = j;
-									Carre.h = height_grille/m * 0.9;
+									Carre.x = j;
+									Carre.w = width_grille/m * 0.9;
+									Carre.y = i;
+									Carre.h = height_grille/n * 0.9;
 
 									SDL_SetRenderDrawColor(renderer, (grille_user[iy][ix] == -1)? 255:0, (grille_user[iy][ix] == 0)? 0:255, (grille_user[iy][ix] == 1)? 0:255, 255);
 									SDL_RenderFillRect(renderer, &Carre);
@@ -208,14 +208,15 @@ int main() {
 					}
 					break;
 				case SDL_MOUSEBUTTONDOWN:
-					if (((event.button.x-width_interface)%(width_grille/n)<=0.9*width_grille/n)&&((event.button.y-height_interface)%(height_grille/n)<=0.9*height_grille/m)&&(event.button.x<=width - (0.1 * width_grille/n))&&(event.button.y <= height - (0.1 * height_grille/m))&&(event.button.x>=width_interface)&&(event.button.y>=height_interface)) {
-						ix = (int)(event.button.x-width_interface)/(width_grille/n);
-						iy = (int)(event.button.y - height_interface)/(height_grille/m);
-						Carre.x = ix*(width_grille/n)+width_interface;
+					if (((event.button.x-width_interface)%(width_grille/m)<=0.9*width_grille/m)&&((event.button.y-height_interface)%(height_grille/n)<=0.9*height_grille/n)&&(event.button.x<=width - (0.1 * width_grille/m))&&(event.button.y <= height - (0.1 * height_grille/n))&&(event.button.x>=width_interface)&&(event.button.y>=height_interface)) {
+						ix = (int)(event.button.x-width_interface)/(width_grille/m);
+						iy = (int)(event.button.y - height_interface)/(height_grille/n);
+						Carre.x = ix*(width_grille/m)+width_interface;
+						printf("%d %d %d \n", ix, iy, grille_user[iy][ix]);
 						printf("%d %d \n",Carre.x, ix);
-						Carre.w = width_grille/n * 0.9;
-						Carre.y = iy*(height_grille/m)+height_interface;
-						Carre.h = height_grille/m * 0.9;
+						Carre.w = width_grille/m * 0.9;
+						Carre.y = iy*(height_grille/n)+height_interface;
+						Carre.h = height_grille/n * 0.9;
 
 						if (event.button.button == SDL_BUTTON_LEFT) {
 							if (grille_user[iy][ix] == 1) {
@@ -245,9 +246,19 @@ int main() {
 							erreur = VerificationSucces(n,m,I1,I2,grille_user,grille_user_transp);
 			        if (erreur==0) {
 
-			          printf("\n\n succès !!!!\n");
+								TTF_SetFontStyle(font, TTF_STYLE_BOLD);
+								font = TTF_OpenFont("arial.ttf",45*width*height/(80*n*80*m));
+								texte = TTF_RenderText_Blended(font, "Succes", couleurNoire);
+								SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer,
+								texte);
 
-			          run = 0;
+								int texW = width;
+								int texH = height;
+								SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+								SDL_Rect dstrect = {width/2,height/2 , texW, texH };
+								SDL_RenderCopy(renderer, texture, NULL, &dstrect);
+								SDL_RenderPresent(renderer);
+
 							}
 							else {
 								essai++;
@@ -261,7 +272,7 @@ int main() {
 								int texW = width_interface/4;
 								int texH = height_interface/4;
 								SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
-								SDL_Rect dstrect = {width_interface/4, Bouton.y+Bouton.w, texW, texH };
+								SDL_Rect dstrect = {width_interface/6, Bouton.y+Bouton.w, texW, texH };
 								SDL_RenderCopy(renderer, texture, NULL, &dstrect);
 								SDL_RenderPresent(renderer);
 							}
