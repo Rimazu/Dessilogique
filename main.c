@@ -5,6 +5,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include "jeu.h"
+#include "affichage.h"
 
 int main() {
 
@@ -136,17 +137,8 @@ int main() {
 	sprintf(buffer,"%d",essai);
 	strcpy(textEssai,"Echecs : ");
 	strcat(textEssai, buffer);
-  texte = TTF_RenderText_Blended(font, textEssai, couleurNoire);
-	texture = SDL_CreateTextureFromSurface(renderer,texte);
 
-	Carre.x = Bouton.x;
-	Carre.y = Bouton.y+Bouton.h;
-	Carre.w = Bouton.w;
-	Carre.h = Bouton.h;
-
-	SDL_RenderCopy(renderer, texture, NULL, &Carre);
-  SDL_RenderPresent(renderer);
-
+	Affichagetexte(textEssai,renderer,Carre,font,couleurNoire,couleurRouge,Bouton.x,Bouton.y+Bouton.h,Bouton.w,Bouton.h);
 	while (run) {
 		while (SDL_PollEvent(&event)) {
 			switch(event.type) {
@@ -253,33 +245,17 @@ int main() {
 
 									TTF_SetFontStyle(font, TTF_STYLE_BOLD);
 									font = TTF_OpenFont("arial.ttf",45*width*height/(80*n*80*m));
-									texte = TTF_RenderText_Shaded(font, "Succes", couleurNoire,couleurRouge);
-									texture = SDL_CreateTextureFromSurface(renderer,texte);
-
-									Carre.x = width/4;
-									Carre.y = height/4;
-									Carre.w = width/2;
-									Carre.h = height/2;
-									SDL_RenderCopy(renderer, texture, NULL, &Carre);
-									SDL_RenderPresent(renderer);
+			
+									Affichagetexte("Success",renderer,Carre,font,couleurNoire,couleurRouge,width/4,height/4,width/2,height/2);
 
 								}
-								else {
+						else {
 									essai++;
 									sprintf(buffer,"%d",essai);
-									strcpy(textEssai,"Essai : ");
+									strcpy(textEssai,"Echecs : ");
 									strcat(textEssai, buffer);
-									texte = TTF_RenderText_Shaded(font, textEssai, couleurNoire,couleurRouge);
-									texture = SDL_CreateTextureFromSurface(renderer,texte);
-
-									Carre.x = Bouton.x;
-									Carre.y = Bouton.y+Bouton.h;
-									Carre.w = Bouton.w;
-									Carre.h = Bouton.h;
-
-									SDL_RenderCopy(renderer, texture, NULL, &Carre);
-									SDL_RenderPresent(renderer);
-								}
+									Affichagetexte(textEssai,renderer,Carre,font,couleurNoire,couleurRouge,Bouton.x,Bouton.y+Bouton.h,Bouton.w,Bouton.h);
+						}
 
 	        	}
 					}
