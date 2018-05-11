@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "jeu.h"
 
 
@@ -72,18 +70,18 @@ int ** InitialiserTableau(int n, int m) {
 	return(tab);
 }
 
-int ComparerIndices(int n, int * indiceligne, int * ligne_user) {
+int ComparerIndices(int m, int * indiceligne, int * ligne_user) {
 	int i = 0,			/*indice parcours ligne_user*/
 		j = 0, 			/*indice parcours indiceligne*/
 		compteur = 0,
 		erreur = 0;
 
-	while ((!erreur)&&(i<n)) {
-		while ((i<n)&&(!ligne_user[i] == 1)) {
+	while ((!erreur)&&(i<m)) {
+		while ((i<m)&&(ligne_user[i] != 1)) {
 			i++;
 		}
 		compteur=0;
-		while ((i<n)&&ligne_user[i] == 1) {
+		while ((i<m)&&ligne_user[i] == 1) {
 			i++;
 			compteur++;
 		}
@@ -111,8 +109,8 @@ int ** Transposer(int ** T, int n, int m) {
 	int 	i,j;
 	int **	Tt = InitialiserTableau(m,n);
 
-	for (i=0;i<n;i++) {
-		for (j=0;j<m;j++) {
+	for (i=0;i<m;i++) {
+		for (j=0;j<n;j++) {
 			Tt[i][j] = T[j][i];
 		}
 	}
