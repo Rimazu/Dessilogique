@@ -134,7 +134,7 @@ int main() {
 
   /* Écriture du texte dans la SDL_Surface texte en mode Blended (optimal) */
 	sprintf(buffer,"%d",essai);
-	strcpy(textEssai,"Essai : ");
+	strcpy(textEssai,"Echecs : ");
 	strcat(textEssai, buffer);
   texte = TTF_RenderText_Blended(font, textEssai, couleurNoire);
 	texture = SDL_CreateTextureFromSurface(renderer,texte);
@@ -190,7 +190,7 @@ int main() {
 							SDL_RenderFillRect(renderer, &Bouton);
 
 							sprintf(buffer,"%d",essai);
-							strcpy(textEssai,"Essai : ");
+							strcpy(textEssai,"Echecs : ");
 							strcat(textEssai, buffer);
 							texte = TTF_RenderText_Blended(font, textEssai, couleurNoire);
 							texture = SDL_CreateTextureFromSurface(renderer,texte);
