@@ -9,7 +9,7 @@
 
 
 
-char * AfficherIndicesLigne(int * ligne, int m) {
+char * IndicesLigne(int * ligne, int m) {
 
 	char * indice = malloc(m*sizeof(char));
 	char mot[5]="";
@@ -28,18 +28,22 @@ char * AfficherIndicesLigne(int * ligne, int m) {
 }
 
 void Affichagetexte(char * chaine,SDL_Renderer * renderer,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int x,int y,int width_interface, int height_interface) {
-
-		SDL_Surface	*texte = TTF_RenderText_Shaded(font, chaine, couleur1,couleur2);
-		
-		SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer,texte);
 		int texW = width_interface/4;
 		int texH = height_interface/4;
-		
+		SDL_Surface	*texte = TTF_RenderText_Shaded(font, chaine, couleur1,couleur2);
+		SDL_Rect dstrect;
+		SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer,texte);
+
+		dstrect.x = x;
+		dstrect.y = y;
+		dstrect.w = texW;
+		dstrect.h = texH;
 		SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
-		SDL_Rect dstrect = {x, y, texW, texH };
 		SDL_RenderCopy(renderer, texture, NULL, &dstrect);
 		SDL_RenderPresent(renderer);
 }
+
+void AffichageIndice
 /*
 int main() {
 	int n,m;
