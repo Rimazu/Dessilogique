@@ -5,6 +5,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include "jeu.h"
+#include "affichage.h"
+
 
 int main() {
 
