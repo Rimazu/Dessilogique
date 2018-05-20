@@ -9,47 +9,54 @@
 
 int main() {
 
-	int		n,m,i,j,ix,iy,succes=0;
-	int 	essai=0;
-	char textEssai[80];
-	char buffer[3];
+	int					n,
+						m,
+						i,
+						j,
+						ix,
+						iy,
+						succes = 0,
+						essai=0;
 
-	int	**	grille = Stocker("test.txt", &n, &m);
-	int **	grille_user = InitialiserTableau(n,m);
-	int ** grille_user_transp = InitialiserTableau(m,n);
-	int ** grille_transp = Transposer(grille,n,m);
-	int **	I1= IndiceLignes(m,n,grille_transp);
-	int **	I2= IndiceLignes(n,m,grille);
+	int				**	grille = Stocker("test.txt", &n, &m),
+					**	grille_transp = Transposer(grille,n,m),
+					**	grille_user = InitialiserTableau(n,m),
+					**	grille_user_transp = InitialiserTableau(m,n),
+					**	I1 = IndiceLignes(m,n,grille_transp),
+					**	I2 = IndiceLignes(n,m,grille);
 
-	int width = 80*m;
-	int height = 80*n;
-	int width_interface = 0.35 * width;
-	int height_interface = 0.35 * height;
-	int width_grille = 0.65 * width;
-	int height_grille = 0.65 * height;
-
-	int 	run = 1;
-	int erreur = 0;
-
-	SDL_Renderer * renderer;
-	SDL_Rect Carre;
-	SDL_Rect Bouton;
+	int					width = 80*m,
+						height = 80*n,
+						width_interface = 0.35 * width,
+						height_interface = 0.35 * height,
+						width_grille = 0.65 * width,
+						height_grille = 0.65 * height;
 
 
-	TTF_Font * font;
-	SDL_Surface	*texte=NULL;
-	SDL_Texture * texture=NULL;
+	char				textEssai[80],
+						buffer[3];
+
+	int 				run = 1,
+						erreur = 0;
+
+	SDL_Renderer	*	renderer;
+	SDL_Rect 			Carre;
+	SDL_Rect 			Bouton;
+
+
+	TTF_Font		*	font;
+	SDL_Surface		*	texte = NULL;
+	SDL_Texture		*	texture = NULL;
 	SDL_Color couleurNoire = {0,0,0,0};
 	SDL_Color couleurRouge = {255,0,0,0};
 
 	/* variable d'initialisation de SDL_image */
-	int flags = IMG_INIT_JPG | IMG_INIT_PNG;
+	int 				flags = IMG_INIT_JPG | IMG_INIT_PNG;
 	/* variable liee a la fenetre */
-	SDL_Window * window;
+	SDL_Window		*	window;
 	/* variables liees a la capture d'evenement */
-	SDL_Event event;
-
-
+	SDL_Event			event;
+	
 	printf("Variables initialisées !\n");
 
 
@@ -102,6 +109,7 @@ int main() {
 	}
 
 	printf("SDL initialisée !\n");
+	
 
 	/*initialisation de la police*/
 	font = TTF_OpenFont("arial.ttf",20);
@@ -133,12 +141,17 @@ int main() {
 	SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
 	SDL_RenderFillRect(renderer, &Bouton);
 
-  /* Écriture du texte dans la SDL_Surface texte en mode Blended (optimal) */
+	/* Écriture du texte dans la SDL_Surface texte en mode Blended (optimal) */
 	sprintf(buffer,"%d",essai);
 	strcpy(textEssai,"Echecs : ");
 	strcat(textEssai, buffer);
 
 	Affichagetexte(textEssai,renderer,Carre,font,couleurNoire,couleurRouge,Bouton.x,Bouton.y+Bouton.h,Bouton.w,Bouton.h);
+	
+	/*Affichage des indices de la grille*/
+	AffichageIndiceLignes(renderer,Carre,font,couleurNoire,couleurRouge,width,height,I2,m,n);
+	AffichageIndiceColonnes(renderer,Carre,font,couleurNoire,couleurRouge,width,height,I1,m,n);
+	
 	while (run) {
 		while (SDL_PollEvent(&event)) {
 			switch(event.type) {
@@ -195,6 +208,10 @@ int main() {
 							SDL_RenderCopy(renderer, texture, NULL, &Carre);
 							SDL_RenderPresent(renderer);
 							printf("Size : %d%d\n", width, height);
+							
+							AffichageIndiceLignes(renderer,Carre,font,couleurNoire,couleurRouge,width,height,I2,m,n);
+							AffichageIndiceColonnes(renderer,Carre,font,couleurNoire,couleurRouge,width,height,I1,m,n);
+							
 					}
 					break;
 				case SDL_MOUSEBUTTONDOWN:
