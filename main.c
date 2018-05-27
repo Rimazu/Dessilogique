@@ -1,40 +1,30 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <SDL2/SDL.h>
-#include <string.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
 #include "jeu.h"
 #include "affichage.h"
 
 int main() {
 
-	int					n,
+	int				n,
 						m,
-						i,
-						j,
-						ix,
-						iy,
-						succes = 0,
 						essai=0;
 
-	int				**	grille = Stocker("test.txt", &n, &m),
-					**	grille_transp = Transposer(grille,n,m),
-					**	grille_user = InitialiserTableau(n,m),
-					**	grille_user_transp = InitialiserTableau(m,n),
-					**	I1 = IndiceLignes(m,n,grille_transp),
-					**	I2 = IndiceLignes(n,m,grille);
+	int			**	grille = NULL,
+					**	grille_transp = NULL,
+					**	grille_user = NULL,
+					**	grille_user_transp = NULL,
+					**	I1 = NULL,
+					**	I2 = NULL;
 
-	int					width = 80*m,
-						height = 80*n,
+	int				width = 300,
+						height = 300,
 						width_interface = 0.35 * width,
 						height_interface = 0.35 * height,
 						width_grille = 0.65 * width,
 						height_grille = 0.65 * height;
 
 
-	char				textEssai[80],
-						buffer[3];
+	char			textEssai[80],
+						buffer[3],
+						etat[10]="menu";
 
 	int 				run = 1,
 						erreur = 0;
@@ -45,8 +35,6 @@ int main() {
 
 
 	TTF_Font		*	font;
-	SDL_Surface		*	texte = NULL;
-	SDL_Texture		*	texture = NULL;
 	SDL_Color couleurNoire = {0,0,0,0};
 	SDL_Color couleurRouge = {255,0,0,0};
 
@@ -56,7 +44,7 @@ int main() {
 	SDL_Window		*	window;
 	/* variables liees a la capture d'evenement */
 	SDL_Event			event;
-	
+
 	printf("Variables initialisées !\n");
 
 
@@ -109,49 +97,15 @@ int main() {
 	}
 
 	printf("SDL initialisée !\n");
-	
+
 
 	/*initialisation de la police*/
 	font = TTF_OpenFont("arial.ttf",20);
 
 	printf("Evenements initialisés !\n");
 
+	AffichageMenu(renderer,width,height);
 
-	SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
-	SDL_RenderClear(renderer);
-
-
-	for (i=height_interface;i<=(height-height_grille/n);i=i+height_grille/n) {
-		for (j=width_interface;j<=(width-width_grille/m);j=j+width_grille/m) {
-
-			Carre.x = j;
-			Carre.w = width_grille/m * 0.9;
-			Carre.y = i;
-			Carre.h = height_grille/n * 0.9;
-			SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-			SDL_RenderFillRect(renderer, &Carre);
-		}
-
-	}
-
-	Bouton.x = width_interface/5;
-	Bouton.w = width_interface/3;
-	Bouton.y = height_interface/5;
-	Bouton.h = height_interface/3;
-	SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
-	SDL_RenderFillRect(renderer, &Bouton);
-
-	/* Écriture du texte dans la SDL_Surface texte en mode Blended (optimal) */
-	sprintf(buffer,"%d",essai);
-	strcpy(textEssai,"Echecs : ");
-	strcat(textEssai, buffer);
-
-	Affichagetexte(textEssai,renderer,Carre,font,couleurNoire,couleurRouge,Bouton.x,Bouton.y+Bouton.h,Bouton.w,Bouton.h);
-	
-	/*Affichage des indices de la grille*/
-	AffichageIndiceLignes(renderer,Carre,font,couleurNoire,couleurRouge,width,height,I2,m,n);
-	AffichageIndiceColonnes(renderer,Carre,font,couleurNoire,couleurRouge,width,height,I1,m,n);
-	
 	while (run) {
 		while (SDL_PollEvent(&event)) {
 			switch(event.type) {
@@ -164,117 +118,88 @@ int main() {
 							width = event.window.data1;
 							height = event.window.data2;
 
-							width_interface = 0.35 * width;
-							height_interface = 0.35 * height;
-							width_grille = 0.65 * width;
-							height_grille = 0.65 * height;
-							font = TTF_OpenFont("arial.ttf",20*width*height/(80*n*80*m));
-							SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
-							SDL_RenderClear(renderer);
-							for (i=height_interface;i<=(height-height_grille/n);i=i+height_grille/n) {
-								for (j=width_interface;j<=(width-width_grille/m);j=j+width_grille/m) {
 
-									ix = (j-width_interface)/(width_grille/m);
-									iy = (i-height_interface)/(height_grille/n);
+							if (strcmp(etat,"menu")==0)
+							{
+									AffichageMenu(renderer,width,height);
+							}
+							else
+							{
+								width_interface = 0.35 * width;
+								height_interface = 0.35 * height;
+								width_grille = 0.65 * width;
+								height_grille = 0.65 * height;
+								font = TTF_OpenFont("arial.ttf",20*width*height/(80*n*80*m));
+								AffichageJeu(renderer,Carre,&Bouton,font,couleurNoire,couleurRouge,I2,I1,width,height,width_grille,width_interface,height_grille,height_interface,grille_user,m,n,essai,textEssai,buffer);
+								if (strcmp(etat,"succes")==0)
+								{
+									font = TTF_OpenFont("arial.ttf",45*width*height/(80*n*80*m));
 
-									Carre.x = j;
-									Carre.w = width_grille/m * 0.9;
-									Carre.y = i;
-									Carre.h = height_grille/n * 0.9;
-
-									SDL_SetRenderDrawColor(renderer, (grille_user[iy][ix] == -1)? 255:0, (grille_user[iy][ix] == 0)? 0:255, (grille_user[iy][ix] == 1)? 0:255, 255);
-									SDL_RenderFillRect(renderer, &Carre);
+									Affichagetexte("Success",renderer,Carre,font,couleurNoire,couleurRouge,width/4,height/4,width/2,height/2);
 								}
 
 							}
-							Bouton.x = width_interface/5;
-							Bouton.w = width_interface/3;
-							Bouton.y = height_interface/5;
-							Bouton.h = height_interface/3;
-							SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
-							SDL_RenderFillRect(renderer, &Bouton);
-
-							sprintf(buffer,"%d",essai);
-							strcpy(textEssai,"Echecs : ");
-							strcat(textEssai, buffer);
-							texte = TTF_RenderText_Blended(font, textEssai, couleurNoire);
-							texture = SDL_CreateTextureFromSurface(renderer,texte);
-
-							Carre.x = Bouton.x;
-							Carre.y = Bouton.y+Bouton.h;
-							Carre.w = Bouton.w;
-							Carre.h = Bouton.h;
-
-							SDL_RenderCopy(renderer, texture, NULL, &Carre);
-							SDL_RenderPresent(renderer);
-							printf("Size : %d%d\n", width, height);
-							
-							AffichageIndiceLignes(renderer,Carre,font,couleurNoire,couleurRouge,width,height,I2,m,n);
-							AffichageIndiceColonnes(renderer,Carre,font,couleurNoire,couleurRouge,width,height,I1,m,n);
-							
-					}
-					break;
+						}
+							break;
 				case SDL_MOUSEBUTTONDOWN:
-					if (succes) {
-						run = 0;
+					if (strcmp(etat,"succes")==0) {
+						strcpy(etat,"menu");
+						AffichageMenu(renderer,width,height);
 					}
 					else
 						{
-						if (((event.button.x-width_interface)%(width_grille/m)<=0.9*width_grille/m)&&((event.button.y-height_interface)%(height_grille/n)<=0.9*height_grille/n)&&(event.button.x<=width - (0.1 * width_grille/m))&&(event.button.y <= height - (0.1 * height_grille/n))&&(event.button.x>=width_interface)&&(event.button.y>=height_interface)) {
-							ix = (int)(event.button.x-width_interface)/(width_grille/m);
-							iy = (int)(event.button.y - height_interface)/(height_grille/n);
-							Carre.x = ix*(width_grille/m)+width_interface;
-							printf("%d %d %d \n", ix, iy, grille_user[iy][ix]);
-							printf("%d %d \n",Carre.x, ix);
-							Carre.w = width_grille/m * 0.9;
-							Carre.y = iy*(height_grille/n)+height_interface;
-							Carre.h = height_grille/n * 0.9;
+							if (strcmp(etat,"jeu")==0)
+							{
+								if (((event.button.x-width_interface)%(width_grille/m)<=0.9*width_grille/m)&&((event.button.y-height_interface)%(height_grille/n)<=0.9*height_grille/n)&&(event.button.x<=width - (0.1 * width_grille/m))&&(event.button.y <= height - (0.1 * height_grille/n))&&(event.button.x>=width_interface)&&(event.button.y>=height_interface)) {
+									Coloriage(event, renderer,Carre,width_interface,width_grille,height_interface,height_grille,m,n,grille_user,grille_user_transp);
+								}
+								if ((event.button.x >=Bouton.x)&&(event.button.x <= Bouton.x + Bouton.w)&&(event.button.y >=Bouton.y)&&(event.button.y <=Bouton.y + Bouton.h))
+								{
+										erreur = VerificationSucces(n,m,I1,I2,grille_user,grille_user_transp);
+						        if (erreur==0) {
 
-							if (event.button.button == SDL_BUTTON_LEFT) {
-								if (grille_user[iy][ix] == 1) {
-									grille_user[iy][ix] = 0;
-									SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-								}
-								else {
-									grille_user[iy][ix] = 1;
-									SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-								}
+											strcpy(etat,"succes");
+
+											font = TTF_OpenFont("arial.ttf",45*width*height/(80*n*80*m));
+
+											Affichagetexte("Success",renderer,Carre,font,couleurNoire,couleurRouge,width/4,height/4,width/2,height/2);
+
+										}
+										else {
+											essai++;
+											sprintf(buffer,"%d",essai);
+											strcpy(textEssai,"Echecs : ");
+											strcat(textEssai, buffer);
+											Affichagetexte(textEssai,renderer,Carre,font,couleurNoire,couleurRouge,Bouton.x,Bouton.y+Bouton.h,Bouton.w,Bouton.h);
+										}
+
+			        	}
 							}
-							else {
-								if (grille_user[iy][ix] == -1) {
-									grille_user[iy][ix] = 0;
-									SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+							else
+							{
+								if (strcmp(etat,"menu")==0)
+								{
+									strcpy(etat,"jeu");
+
+									if (event.button.x < width/3)
+										{
+											InitialisationVariables("Grille1.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &I1, &I2,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
+										}
+									else
+									{
+										if ((event.button.x >= width/3) && (event.button.x < 2*width/3))
+										{
+											InitialisationVariables("Grille2.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &I1, &I2,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
+										}
+										else
+											InitialisationVariables("Grille3.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &I1, &I2,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
+									}
 								}
-								else {
-									grille_user[iy][ix] = -1;
-									SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-								}
+								SDL_SetWindowSize(window, width, height);
+								AffichageJeu(renderer,Carre,&Bouton,font,couleurNoire,couleurRouge,I2,I1,width,height,width_grille,width_interface,height_grille,height_interface,grille_user,m,n,essai, textEssai, buffer);
 							}
-							grille_user_transp[ix][iy] = grille_user[iy][ix];
-							SDL_RenderFillRect(renderer, &Carre);
-							SDL_RenderPresent(renderer);
-						}
-						if ((event.button.x >=Bouton.x)&&(event.button.x <= Bouton.x + Bouton.w)&&(event.button.y >=Bouton.y)&&(event.button.y <=Bouton.y + Bouton.h)) {
-								erreur = VerificationSucces(n,m,I1,I2,grille_user,grille_user_transp);
-				        if (erreur==0) {
 
-									succes = 1;
 
-									TTF_SetFontStyle(font, TTF_STYLE_BOLD);
-									font = TTF_OpenFont("arial.ttf",45*width*height/(80*n*80*m));
-			
-									Affichagetexte("Success",renderer,Carre,font,couleurNoire,couleurRouge,width/4,height/4,width/2,height/2);
-
-								}
-						else {
-									essai++;
-									sprintf(buffer,"%d",essai);
-									strcpy(textEssai,"Echecs : ");
-									strcat(textEssai, buffer);
-									Affichagetexte(textEssai,renderer,Carre,font,couleurNoire,couleurRouge,Bouton.x,Bouton.y+Bouton.h,Bouton.w,Bouton.h);
-						}
-
-	        	}
 					}
 					break;
 				case SDL_QUIT :
@@ -291,7 +216,6 @@ int main() {
 	/* fermeture de SDL_image, SDL_ttf et SDL2 */
 	IMG_Quit();
 	TTF_CloseFont(font);
-	SDL_FreeSurface(texte);
 	TTF_Quit();
 	SDL_Quit();
 

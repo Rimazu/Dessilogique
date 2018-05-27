@@ -140,3 +140,20 @@ int VerificationSucces(int n, int m, int ** I1, int ** I2, int ** grille_user, i
 	return(erreur);
 
 }
+
+void InitialisationVariables(char * NomGrille,int *** grille, int ***	grille_transp,int ***	grille_user,int ***	grille_user_transp,int	***	I1,int ***	I2, int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m)
+{
+	*grille = Stocker(NomGrille, n, m);
+	*grille_transp = Transposer(*grille,*n,*m);
+	*grille_user = InitialiserTableau(*n,*m);
+	*grille_user_transp = InitialiserTableau(*m,*n);
+	*I1 = IndiceLignes(*m,*n,*grille_transp);
+	*I2 = IndiceLignes(*n,*m,*grille);
+
+	*width = 80*(*m);
+	*height = 80*(*n);
+	*width_interface = 0.35 * (*width);
+	*height_interface = 0.35 * (*height);
+	*width_grille = 0.65 * (*width);
+	*height_grille = 0.65 * (*height);
+}
