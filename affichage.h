@@ -12,7 +12,7 @@ char * IndicesLigne(int * ligne, int m);
 
 void AffichageJeu(SDL_Renderer * renderer, SDL_Rect Carre, SDL_Rect * Bouton,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int ** IndiceLignes,int ** IndiceColonnes,int width, int height, int width_grille, int width_interface, int height_grille,int height_interface,int ** grille_user, int m, int n, int essai, char * textEssai, char * buffer);
 
-void AffichageMenu(SDL_Renderer * renderer, int width, int height);
+void AffichageMenu(SDL_Renderer * renderer,SDL_Rect Carre,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2, int width, int height);
 
 void Affichagetexte(char * chaine,SDL_Renderer * renderer,SDL_Rect carre,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int x,int y,int w, int h);
 

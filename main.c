@@ -14,8 +14,8 @@ int main() {
 					**	I1 = NULL,
 					**	I2 = NULL;
 
-	int				width = 300,
-						height = 300,
+	int				width = 400,
+						height = 400,
 						width_interface = 0.35 * width,
 						height_interface = 0.35 * height,
 						width_grille = 0.65 * width,
@@ -100,11 +100,11 @@ int main() {
 
 
 	/*initialisation de la police*/
-	font = TTF_OpenFont("arial.ttf",20);
+	font = TTF_OpenFont("arial.ttf",40);
 
 	printf("Evenements initialisés !\n");
 
-	AffichageMenu(renderer,width,height);
+	AffichageMenu(renderer,Carre,font,couleurNoire,couleurRouge,width,height);
 
 	while (run) {
 		while (SDL_PollEvent(&event)) {
@@ -121,7 +121,7 @@ int main() {
 
 							if (strcmp(etat,"menu")==0)
 							{
-									AffichageMenu(renderer,width,height);
+									AffichageMenu(renderer,Carre,font,couleurNoire,couleurRouge,width,height);
 							}
 							else
 							{
@@ -135,7 +135,7 @@ int main() {
 								{
 									font = TTF_OpenFont("arial.ttf",45*width*height/(80*n*80*m));
 
-									Affichagetexte("Success",renderer,Carre,font,couleurNoire,couleurRouge,width/4,height/4,width/2,height/2);
+									Affichagetexte("Success",renderer,Carre,font,couleurNoire,couleurRouge,0,0,width_interface,height_interface);
 								}
 
 							}
@@ -144,7 +144,8 @@ int main() {
 				case SDL_MOUSEBUTTONDOWN:
 					if (strcmp(etat,"succes")==0) {
 						strcpy(etat,"menu");
-						AffichageMenu(renderer,width,height);
+						essai = 0;
+						AffichageMenu(renderer,Carre,font,couleurNoire,couleurRouge,width,height);
 					}
 					else
 						{
@@ -162,7 +163,7 @@ int main() {
 
 											font = TTF_OpenFont("arial.ttf",45*width*height/(80*n*80*m));
 
-											Affichagetexte("Success",renderer,Carre,font,couleurNoire,couleurRouge,width/4,height/4,width/2,height/2);
+											Affichagetexte("Success",renderer,Carre,font,couleurNoire,couleurRouge,0,0,width_interface,height_interface);
 
 										}
 										else {
@@ -180,23 +181,26 @@ int main() {
 								if (strcmp(etat,"menu")==0)
 								{
 									strcpy(etat,"jeu");
-
-									if (event.button.x < width/3)
-										{
-											InitialisationVariables("Grille1.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &I1, &I2,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
-										}
-									else
+									if (event.button.y > height/5)
 									{
-										if ((event.button.x >= width/3) && (event.button.x < 2*width/3))
+										if (event.button.x < width/3)
 										{
-											InitialisationVariables("Grille2.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &I1, &I2,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
+												InitialisationVariables("Grille1.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &I1, &I2,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
 										}
 										else
-											InitialisationVariables("Grille3.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &I1, &I2,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
+										{
+											if ((event.button.x >= width/3) && (event.button.x < 2*width/3))
+											{
+												InitialisationVariables("Grille2.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &I1, &I2,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
+											}
+											else
+												InitialisationVariables("Grille3.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &I1, &I2,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
+										}
 									}
+									SDL_SetWindowSize(window, width, height);
+									AffichageJeu(renderer,Carre,&Bouton,font,couleurNoire,couleurRouge,I2,I1,width,height,width_grille,width_interface,height_grille,height_interface,grille_user,m,n,essai, textEssai, buffer);
 								}
-								SDL_SetWindowSize(window, width, height);
-								AffichageJeu(renderer,Carre,&Bouton,font,couleurNoire,couleurRouge,I2,I1,width,height,width_grille,width_interface,height_grille,height_interface,grille_user,m,n,essai, textEssai, buffer);
+
 							}
 
 

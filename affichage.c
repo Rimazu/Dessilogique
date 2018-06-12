@@ -27,14 +27,29 @@ void AffichageJeu(SDL_Renderer * renderer, SDL_Rect Carre, SDL_Rect * Bouton,TTF
 	AffichageIndiceColonnes(renderer,Carre,font,couleur1,couleur2,width,height,IndiceColonnes,m,n);
 }
 
-void AffichageMenu(SDL_Renderer * renderer, int width, int height)
+void AffichageMenu(SDL_Renderer * renderer,SDL_Rect Carre,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2, int width, int height)
 {
-	SDL_SetRenderDrawColor( renderer, 50, 180, 50, 255 );
+	SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
 	SDL_RenderClear(renderer);
 
+	SDL_SetRenderDrawColor( renderer, 50, 180, 50, 255 );
+	/*SDL_RenderDrawLine(renderer, 0, height/5, width, 0);*/
+	Carre.x = 0;
+	Carre.y = height/5;
+	Carre.w = width;
+	Carre.h = height*4/5;
+	SDL_RenderFillRect(renderer,&Carre);
+
 	SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
-	SDL_RenderDrawLine(renderer, width/3, 0, width/3, height);
-	SDL_RenderDrawLine(renderer, 2*width/3, 0, 2*width/3, height);
+	SDL_RenderDrawLine(renderer, width/3, height/5, width/3, height);
+	SDL_RenderDrawLine(renderer, 2*width/3, height/5, 2*width/3, height);
+	Affichagetexte("Dessilogique",renderer,Carre,font,couleur1,couleur2,width/5,0,width*3/5,height/6);
+	couleur2.r = 50;
+	couleur2.g = 180;
+	couleur2.b = 50;
+	Affichagetexte("Grille 1",renderer,Carre,font,couleur1,couleur2,width*0.1/3,height*3*0.8/5,width*0.8/3,2*height*3*0.2/5);
+	Affichagetexte("Grille 2",renderer,Carre,font,couleur1,couleur2,width*1.1/3,height*3*0.8/5,width*0.8/3,2*height*3*0.2/5);
+	Affichagetexte("Grille 3",renderer,Carre,font,couleur1,couleur2,width*2.1/3,height*3*0.8/5,width*0.8/3,2*height*3*0.2/5);
 	SDL_RenderPresent(renderer);
 }
 
