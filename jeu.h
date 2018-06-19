@@ -27,8 +27,13 @@ void Afficher(int **T, int n,int m);
 int ** Transposer(int ** T, int n, int m);
 
 /*Compare le résultat avec la solution */
-int VerificationSucces(int n, int m, int ** I1, int ** I2, int ** grille_user, int ** grille_user_transp);
+int VerificationSucces(int n, int m, int ** IndicesColonnes, int ** IndicesLignes, int ** grille_user, int ** grille_user_transp);
 
-void InitialisationVariables(char * NomGrille,int *** grille, int ***	grille_transp,int ***	grille_user,int ***	grille_user_transp,int	***	I1,int ***	I2, int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m);
+void InitialisationVariables(char * NomGrille,int *** grille, int ***	grille_transp,int ***	grille_user,int ***	grille_user_transp,int	***	IndicesColonnes,int ***	IndicesLignes, int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m);
+
+void Save(int ** grille,int **	grille_user,int	**	IndicesColonnes,int **	IndicesLignes, int width, int height,int n, int m, int essai);
+
+void Load(int *** grille, int ***	grille_transp,int ***	grille_user,int ***	grille_user_transp,int	***	IndicesColonnes,int ***	IndicesLignes, int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m, int * essai);
+
 
 #endif

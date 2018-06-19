@@ -5,7 +5,7 @@
 
 
 
-void AffichageJeu(SDL_Renderer * renderer, SDL_Rect Carre, SDL_Rect * Bouton,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int ** IndiceLignes,int ** IndiceColonnes,int width, int height, int width_grille, int width_interface, int height_grille,int height_interface,int ** grille_user, int m, int n, int essai, char * textEssai, char * buffer)
+void AffichageJeu(SDL_Renderer * renderer, SDL_Rect Carre, SDL_Rect * Bouton,SDL_Rect * SaveBouton,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int ** IndiceLignes,int ** IndiceColonnes,int width, int height, int width_grille, int width_interface, int height_grille,int height_interface,int ** grille_user, int m, int n, int essai, char * textEssai, char * buffer, SDL_Surface * texte, SDL_Texture * texture)
 {
 
 
@@ -14,20 +14,22 @@ void AffichageJeu(SDL_Renderer * renderer, SDL_Rect Carre, SDL_Rect * Bouton,TTF
 
 	AffichageGrille(renderer,Carre,width,height,width_grille,width_interface,height_grille,height_interface,grille_user, m, n);
 
-	AffichageBouton(renderer,Bouton,width_interface,height_interface);
+	AffichageBouton(renderer,Bouton,width_interface,height_interface, couleur1,font, texte, texture);
+	AffichageSave(renderer,SaveBouton,width_interface,height_interface,couleur1,font, texte, texture);
+
 
 	/* Écriture du texte dans la SDL_Surface texte en mode Blended (optimal) */
 	sprintf(buffer,"%d",essai);
 	strcpy(textEssai,"Echecs : ");
 	strcat(textEssai, buffer);
-	Affichagetexte(textEssai,renderer,Carre,font,couleur1,couleur2,Bouton->x,Bouton->y+Bouton->h,Bouton->w,Bouton->h);
+	Affichagetexte(texte,texture,textEssai,renderer,Carre,font,couleur1,couleur2,Bouton->x,Bouton->y+Bouton->h,Bouton->w,Bouton->h);
 
 	/*Affichage des indices de la grille*/
-	AffichageIndiceLignes(renderer,Carre,font,couleur1,couleur2,width,height,IndiceLignes,m,n);
-	AffichageIndiceColonnes(renderer,Carre,font,couleur1,couleur2,width,height,IndiceColonnes,m,n);
+	AffichageIndiceLignes(renderer,Carre,font,couleur1,couleur2,width,height,IndiceLignes,m,n,texte,texture);
+	AffichageIndiceColonnes(renderer,Carre,font,couleur1,couleur2,width,height,IndiceColonnes,m,n,texte,texture);
 }
 
-void AffichageMenu(SDL_Renderer * renderer,SDL_Rect Carre,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2, int width, int height)
+void AffichageMenu(SDL_Renderer * renderer,SDL_Rect Carre,SDL_Rect * LoadBouton,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2, int width, int height, SDL_Surface * texte, SDL_Texture * texture)
 {
 	SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
 	SDL_RenderClear(renderer);
@@ -43,14 +45,17 @@ void AffichageMenu(SDL_Renderer * renderer,SDL_Rect Carre,TTF_Font * font,SDL_Co
 	SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
 	SDL_RenderDrawLine(renderer, width/3, height/5, width/3, height);
 	SDL_RenderDrawLine(renderer, 2*width/3, height/5, 2*width/3, height);
-	Affichagetexte("Dessilogique",renderer,Carre,font,couleur1,couleur2,width/5,0,width*3/5,height/6);
+	Affichagetexte(texte,texture,"Dessilogique",renderer,Carre,font,couleur1,couleur2,width/7,0,width*3/5,height/6);
 	couleur2.r = 50;
 	couleur2.g = 180;
 	couleur2.b = 50;
-	Affichagetexte("Grille 1",renderer,Carre,font,couleur1,couleur2,width*0.1/3,height*3*0.8/5,width*0.8/3,2*height*3*0.2/5);
-	Affichagetexte("Grille 2",renderer,Carre,font,couleur1,couleur2,width*1.1/3,height*3*0.8/5,width*0.8/3,2*height*3*0.2/5);
-	Affichagetexte("Grille 3",renderer,Carre,font,couleur1,couleur2,width*2.1/3,height*3*0.8/5,width*0.8/3,2*height*3*0.2/5);
+	Affichagetexte(texte,texture,"Grille 1",renderer,Carre,font,couleur1,couleur2,width*0.1/3,height*3*0.8/5,width*0.8/3,2*height*3*0.2/5);
+	Affichagetexte(texte,texture,"Grille 2",renderer,Carre,font,couleur1,couleur2,width*1.1/3,height*3*0.8/5,width*0.8/3,2*height*3*0.2/5);
+	Affichagetexte(texte,texture,"Grille 3",renderer,Carre,font,couleur1,couleur2,width*2.1/3,height*3*0.8/5,width*0.8/3,2*height*3*0.2/5);
 	SDL_RenderPresent(renderer);
+
+	AffichageLoad(renderer,LoadBouton,width,height,couleur1,font,texte,texture);
+
 }
 
 
@@ -72,10 +77,10 @@ char * IndicesLigne(int * ligne, int m) {
 	return indice;
 }
 
-void Affichagetexte(char * chaine,SDL_Renderer * renderer, SDL_Rect carre,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int x,int y,int w, int h) {
+void Affichagetexte(SDL_Surface * texte,SDL_Texture * texture,char * chaine,SDL_Renderer * renderer, SDL_Rect carre,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int x,int y,int w, int h) {
 
-	SDL_Surface	*texte = TTF_RenderText_Shaded(font, chaine, couleur1,couleur2);
-	SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer,texte);
+	texte = TTF_RenderText_Shaded(font, chaine, couleur1,couleur2);
+	texture = SDL_CreateTextureFromSurface(renderer,texte);
 
 	carre.x = x;
 	carre.y = y;
@@ -85,7 +90,7 @@ void Affichagetexte(char * chaine,SDL_Renderer * renderer, SDL_Rect carre,TTF_Fo
 	SDL_RenderPresent(renderer);
 }
 
-void AffichageIndice1Ligne(SDL_Renderer * renderer, SDL_Rect Carre,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int width,int height, int * ligne, int m, int n, int NumLigne) {
+void AffichageIndice1Ligne(SDL_Renderer * renderer, SDL_Rect Carre,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int width,int height, int * ligne, int m, int n, int NumLigne, SDL_Surface * texte, SDL_Texture * texture) {
 	char	indice[3]="";
 	int		i = m - 1,
 			x = 0.35 * width,
@@ -96,13 +101,13 @@ void AffichageIndice1Ligne(SDL_Renderer * renderer, SDL_Rect Carre,TTF_Font * fo
 		if (ligne[i] != 0) {
 			sprintf(indice,"%d",ligne[i]);
 			x = x - pas;
-			Affichagetexte(indice,renderer,Carre,font,couleur1,couleur2,x,y,pas,pas);
+			Affichagetexte(texte,texture,indice,renderer,Carre,font,couleur1,couleur2,x,y,pas,pas);
 		}
 		i--;
 	}
 }
 
-void AffichageIndice1Colonne(SDL_Renderer * renderer, SDL_Rect Carre,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int width,int height, int * colonne, int m, int n, int NumColonne) {
+void AffichageIndice1Colonne(SDL_Renderer * renderer, SDL_Rect Carre,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int width,int height, int * colonne, int m, int n, int NumColonne, SDL_Surface * texte, SDL_Texture * texture) {
 	char	indice[3]="";
 	int		i = n - 1,
 			x = 0.35 * width + 0.65 * width * NumColonne / m,
@@ -113,26 +118,26 @@ void AffichageIndice1Colonne(SDL_Renderer * renderer, SDL_Rect Carre,TTF_Font * 
 		if (colonne[i] != 0) {
 			sprintf(indice,"%d",colonne[i]);
 			y = y - pas;
-			Affichagetexte(indice,renderer,Carre,font,couleur1,couleur2,x,y,pas,pas);
+			Affichagetexte(texte,texture,indice,renderer,Carre,font,couleur1,couleur2,x,y,pas,pas);
 		}
 		i--;
 	}
 }
 
 
-void AffichageIndiceLignes(SDL_Renderer * renderer, SDL_Rect Carre,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int width,int height, int ** IndiceLignes, int m, int n) {
+void AffichageIndiceLignes(SDL_Renderer * renderer, SDL_Rect Carre,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int width,int height, int ** IndiceLignes, int m, int n, SDL_Surface * texte, SDL_Texture * texture) {
 	int i;
 
 	for (i=0; i<n; i++) {
-		AffichageIndice1Ligne(renderer,Carre,font,couleur1,couleur2,width,height,IndiceLignes[i],m,n,i);
+		AffichageIndice1Ligne(renderer,Carre,font,couleur1,couleur2,width,height,IndiceLignes[i],m,n,i,texte,texture);
 	}
 }
 
-void AffichageIndiceColonnes(SDL_Renderer * renderer, SDL_Rect Carre,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int width,int height, int ** IndiceColonnes, int m, int n) {
+void AffichageIndiceColonnes(SDL_Renderer * renderer, SDL_Rect Carre,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int width,int height, int ** IndiceColonnes, int m, int n, SDL_Surface * texte, SDL_Texture * texture) {
 	int i;
 
 	for (i=0; i<m; i++) {
-		AffichageIndice1Colonne(renderer,Carre,font,couleur1,couleur2,width,height,IndiceColonnes[i],m,n,i);
+		AffichageIndice1Colonne(renderer,Carre,font,couleur1,couleur2,width,height,IndiceColonnes[i],m,n,i,texte,texture);
 	}
 }
 
@@ -159,15 +164,53 @@ void AffichageGrille(SDL_Renderer * renderer, SDL_Rect Carre,int width, int heig
 	}
 }
 
-void AffichageBouton(SDL_Renderer * renderer, SDL_Rect * Bouton, int width_interface, int height_interface)
+void AffichageBouton(SDL_Renderer * renderer, SDL_Rect * Bouton, int width_interface, int height_interface, SDL_Color couleur1,TTF_Font * font, SDL_Surface * texte, SDL_Texture * texture)
 {
-	Bouton->x = width_interface/5;
+	Bouton->x = width_interface/6;
 	Bouton->w = width_interface/3;
 	Bouton->y = height_interface/5;
 	Bouton->h = height_interface/3;
 	SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
 	SDL_RenderFillRect(renderer, Bouton);
+
+	texte = TTF_RenderText_Blended(font, "Test", couleur1);
+	texture = SDL_CreateTextureFromSurface(renderer,texte);
+	SDL_RenderCopy(renderer, texture, NULL, Bouton);
+	SDL_RenderPresent(renderer);
 }
+
+void AffichageSave(SDL_Renderer * renderer, SDL_Rect * SaveBouton, int width_interface, int height_interface, SDL_Color couleur1,TTF_Font * font, SDL_Surface * texte, SDL_Texture * texture)
+{
+
+	SaveBouton->x = 13*width_interface/24;
+	SaveBouton->w = width_interface/3;
+	SaveBouton->y = height_interface/5;
+	SaveBouton->h = height_interface/3;
+	SDL_SetRenderDrawColor(renderer, 0, 200, 50, 255);
+	SDL_RenderFillRect(renderer, SaveBouton);
+
+	texte = TTF_RenderText_Blended(font, "Save", couleur1);
+	texture = SDL_CreateTextureFromSurface(renderer,texte);
+	SDL_RenderCopy(renderer, texture, NULL, SaveBouton);
+	SDL_RenderPresent(renderer);
+}
+
+void AffichageLoad(SDL_Renderer * renderer, SDL_Rect * LoadBouton, int width, int height, SDL_Color couleur1,TTF_Font * font, SDL_Surface * texte, SDL_Texture * texture)
+{
+
+	LoadBouton->x = 4*width/5;
+	LoadBouton->w = width/5;
+	LoadBouton->y = 0;
+	LoadBouton->h = height/5;
+	SDL_SetRenderDrawColor(renderer, 80, 80, 150, 255);
+	SDL_RenderFillRect(renderer, LoadBouton);
+
+	texte = TTF_RenderText_Blended(font, "Load", couleur1);
+	texture = SDL_CreateTextureFromSurface(renderer,texte);
+	SDL_RenderCopy(renderer, texture, NULL, LoadBouton);
+	SDL_RenderPresent(renderer);
+}
+
 
 void Coloriage(SDL_Event event, SDL_Renderer * renderer, SDL_Rect Carre, int width_interface,int width_grille, int height_interface, int height_grille,int m,int n, int ** grille_user, int ** grille_user_transp)
 {
@@ -204,17 +247,3 @@ void Coloriage(SDL_Event event, SDL_Renderer * renderer, SDL_Rect Carre, int wid
 	SDL_RenderFillRect(renderer, &Carre);
 	SDL_RenderPresent(renderer);
 }
-
-/*
-int main() {
-	int n,m;
-	int	**	grille = Stocker("test.txt", &n, &m);
-	int **	grille_user = InitialiserTableau(n,m);
-	int ** grille_user_transp = InitialiserTableau(n,m);
-	int ** grille_transp = Transposer(grille,n,m);
-	int **	I1= IndiceLignes(n,m,grille_transp);
-	int **	I2= IndiceLignes(n,m,grille);
-	Afficher(I2,n,m);
-	AfficherIndicesLigne(I2[0],m);
-	return 0;
-}*/

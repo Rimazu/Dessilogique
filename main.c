@@ -11,8 +11,8 @@ int main() {
 					**	grille_transp = NULL,
 					**	grille_user = NULL,
 					**	grille_user_transp = NULL,
-					**	I1 = NULL,
-					**	I2 = NULL;
+					**	IndicesColonnes = NULL,
+					**	IndicesLignes = NULL;
 
 	int				width = 400,
 						height = 400,
@@ -30,8 +30,11 @@ int main() {
 						erreur = 0;
 
 	SDL_Renderer	*	renderer;
+	SDL_Surface 	* texte = NULL;
+	SDL_Texture		* texture = NULL;
 	SDL_Rect 			Carre;
 	SDL_Rect 			Bouton;
+	SDL_Rect			SaveLoadBouton;
 
 
 	TTF_Font		*	font;
@@ -100,11 +103,11 @@ int main() {
 
 
 	/*initialisation de la police*/
-	font = TTF_OpenFont("arial.ttf",40);
+	font = TTF_OpenFont("arial.ttf",45);
 
 	printf("Evenements initialisés !\n");
 
-	AffichageMenu(renderer,Carre,font,couleurNoire,couleurRouge,width,height);
+	AffichageMenu(renderer,Carre,&SaveLoadBouton,font,couleurNoire,couleurRouge,width,height,texte,texture);
 
 	while (run) {
 		while (SDL_PollEvent(&event)) {
@@ -121,7 +124,7 @@ int main() {
 
 							if (strcmp(etat,"menu")==0)
 							{
-									AffichageMenu(renderer,Carre,font,couleurNoire,couleurRouge,width,height);
+									AffichageMenu(renderer,Carre,&SaveLoadBouton,font,couleurNoire,couleurRouge,width,height,texte,texture);
 							}
 							else
 							{
@@ -129,13 +132,12 @@ int main() {
 								height_interface = 0.35 * height;
 								width_grille = 0.65 * width;
 								height_grille = 0.65 * height;
-								font = TTF_OpenFont("arial.ttf",20*width*height/(80*n*80*m));
-								AffichageJeu(renderer,Carre,&Bouton,font,couleurNoire,couleurRouge,I2,I1,width,height,width_grille,width_interface,height_grille,height_interface,grille_user,m,n,essai,textEssai,buffer);
+								font = TTF_OpenFont("arial.ttf",45*width*height/(80*n*80*m));
+								AffichageJeu(renderer,Carre,&Bouton,&SaveLoadBouton,font,couleurNoire,couleurRouge,IndicesLignes,IndicesColonnes,width,height,width_grille,width_interface,height_grille,height_interface,grille_user,m,n,essai,textEssai,buffer,texte,texture);
 								if (strcmp(etat,"succes")==0)
 								{
-									font = TTF_OpenFont("arial.ttf",45*width*height/(80*n*80*m));
 
-									Affichagetexte("Success",renderer,Carre,font,couleurNoire,couleurRouge,0,0,width_interface,height_interface);
+									Affichagetexte(texte,texture,"Success",renderer,Carre,font,couleurNoire,couleurRouge,0,0,width_interface,height_interface);
 								}
 
 							}
@@ -145,7 +147,7 @@ int main() {
 					if (strcmp(etat,"succes")==0) {
 						strcpy(etat,"menu");
 						essai = 0;
-						AffichageMenu(renderer,Carre,font,couleurNoire,couleurRouge,width,height);
+						AffichageMenu(renderer,Carre,&SaveLoadBouton,font,couleurNoire,couleurRouge,width,height,texte,texture);
 					}
 					else
 						{
@@ -154,52 +156,90 @@ int main() {
 								if (((event.button.x-width_interface)%(width_grille/m)<=0.9*width_grille/m)&&((event.button.y-height_interface)%(height_grille/n)<=0.9*height_grille/n)&&(event.button.x<=width - (0.1 * width_grille/m))&&(event.button.y <= height - (0.1 * height_grille/n))&&(event.button.x>=width_interface)&&(event.button.y>=height_interface)) {
 									Coloriage(event, renderer,Carre,width_interface,width_grille,height_interface,height_grille,m,n,grille_user,grille_user_transp);
 								}
-								if ((event.button.x >=Bouton.x)&&(event.button.x <= Bouton.x + Bouton.w)&&(event.button.y >=Bouton.y)&&(event.button.y <=Bouton.y + Bouton.h))
+								else
 								{
-										erreur = VerificationSucces(n,m,I1,I2,grille_user,grille_user_transp);
-						        if (erreur==0) {
+									if ((event.button.x >=Bouton.x)&&(event.button.x <= Bouton.x + Bouton.w)&&(event.button.y >=Bouton.y)&&(event.button.y <=Bouton.y + Bouton.h))
+									{
+											erreur = VerificationSucces(n,m,IndicesColonnes,IndicesLignes,grille_user,grille_user_transp);
+							        if (erreur==0) {
 
+												strcpy(etat,"succes");
+
+												Affichagetexte(texte,texture,"Success",renderer,Carre,font,couleurNoire,couleurRouge,0,0,width_interface,height_interface);
+
+											}
+											else {
+												essai++;
+												sprintf(buffer,"%d",essai);
+												strcpy(textEssai,"Echecs : ");
+												strcat(textEssai, buffer);
+												Affichagetexte(texte,texture,textEssai,renderer,Carre,font,couleurNoire,couleurRouge,Bouton.x,Bouton.y+Bouton.h,Bouton.w,Bouton.h);
+											}
+									}
+									else
+									{
+										if ((event.button.x >=SaveLoadBouton.x)&&(event.button.x <= SaveLoadBouton.x + SaveLoadBouton.w)&&(event.button.y >=SaveLoadBouton.y)&&(event.button.y <=SaveLoadBouton.y + SaveLoadBouton.h))
+										{
+											Save(grille,grille_user,IndicesColonnes,IndicesLignes,width,height,n,m,essai);
+											Affichagetexte(texte,texture,"Sauvegarde !",renderer,Carre,font,couleurNoire,couleurRouge,0,0,width_interface,height_interface);
 											strcpy(etat,"succes");
-
-											font = TTF_OpenFont("arial.ttf",45*width*height/(80*n*80*m));
-
-											Affichagetexte("Success",renderer,Carre,font,couleurNoire,couleurRouge,0,0,width_interface,height_interface);
-
 										}
-										else {
-											essai++;
-											sprintf(buffer,"%d",essai);
-											strcpy(textEssai,"Echecs : ");
-											strcat(textEssai, buffer);
-											Affichagetexte(textEssai,renderer,Carre,font,couleurNoire,couleurRouge,Bouton.x,Bouton.y+Bouton.h,Bouton.w,Bouton.h);
-										}
-
+									}
 			        	}
+
 							}
 							else
 							{
 								if (strcmp(etat,"menu")==0)
 								{
-									strcpy(etat,"jeu");
-									if (event.button.y > height/5)
+									if ((event.button.x >=SaveLoadBouton.x)&&(event.button.x <= SaveLoadBouton.x + SaveLoadBouton.w)&&(event.button.y >=SaveLoadBouton.y)&&(event.button.y <=SaveLoadBouton.y + SaveLoadBouton.h))
 									{
-										if (event.button.x < width/3)
+										Load(&grille,&grille_transp,&grille_user,&grille_user_transp,&IndicesColonnes,&IndicesLignes,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m,&essai);
+										if (essai == -666)
 										{
-												InitialisationVariables("Grille1.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &I1, &I2,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
+											Affichagetexte(texte,texture,"ERREUR DE CHARGEMENT",renderer,Carre,font,couleurNoire,couleurRouge,0,height/4,width,height/2);
+												strcpy(etat,"succes");
 										}
 										else
 										{
-											if ((event.button.x >= width/3) && (event.button.x < 2*width/3))
+											strcpy(etat,"jeu");
+										}
+
+
+									}
+									else
+									{
+										if (event.button.y > height/5)
+										{
+											if (event.button.x < width/3)
 											{
-												InitialisationVariables("Grille2.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &I1, &I2,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
+													strcpy(etat,"jeu");
+													InitialisationVariables("Grille1.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &IndicesColonnes, &IndicesLignes,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
 											}
 											else
-												InitialisationVariables("Grille3.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &I1, &I2,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
+											{
+												if ((event.button.x >= width/3) && (event.button.x < 2*width/3))
+												{
+													strcpy(etat,"jeu");
+													InitialisationVariables("Grille2.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &IndicesColonnes, &IndicesLignes,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
+												}
+												else
+												{
+													strcpy(etat,"jeu");
+													InitialisationVariables("Grille3.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &IndicesColonnes, &IndicesLignes,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
+												}
+											}
 										}
 									}
+
+									if (strcmp(etat,"jeu")==0)
+									{
 									SDL_SetWindowSize(window, width, height);
-									AffichageJeu(renderer,Carre,&Bouton,font,couleurNoire,couleurRouge,I2,I1,width,height,width_grille,width_interface,height_grille,height_interface,grille_user,m,n,essai, textEssai, buffer);
+									font = TTF_OpenFont("arial.ttf",45*width*height/(80*n*80*m));
+									AffichageJeu(renderer,Carre,&Bouton,&SaveLoadBouton,font,couleurNoire,couleurRouge,IndicesLignes,IndicesColonnes,width,height,width_grille,width_interface,height_grille,height_interface,grille_user,m,n,essai, textEssai, buffer,texte,texture);
+									}
 								}
+
 
 							}
 
