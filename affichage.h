@@ -1,12 +1,7 @@
-#ifndef affichage_h
-#define affichage_h
+#ifndef AFFICHAGE
+#define AFFICHAGE
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <SDL2/SDL.h>
-#include <string.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
+#include "commun.h"
 
 char * IndicesLigne(int * ligne, int m);
 
@@ -33,6 +28,6 @@ void AffichageSave(SDL_Renderer * renderer, SDL_Rect * SaveBouton, int width_int
 void AffichageLoad(SDL_Renderer * renderer, SDL_Rect * LoadBouton, int width, int height, SDL_Color couleur1,TTF_Font * font, SDL_Surface * texte, SDL_Texture * texture);
 
 
-void Coloriage(SDL_Event event, SDL_Renderer * renderer, SDL_Rect Carre, int width_interface,int width_grille, int height_interface, int height_grille,int m,int n, int ** grille_user, int ** grille_user_transp);
+void Coloriage(SDL_Event event, SDL_Renderer * renderer, SDL_Rect Carre, int width_interface,int width_grille, int height_interface, int height_grille,int m,int n, int ** grille_user, int ** grille_user_transp,Tcoup_t * TabCoup);
 
 #endif

@@ -1,9 +1,4 @@
-
-#include <string.h>
 #include "affichage.h"
-#include "jeu.h"
-
-
 
 void AffichageJeu(SDL_Renderer * renderer, SDL_Rect Carre, SDL_Rect * Bouton,SDL_Rect * SaveBouton,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int ** IndiceLignes,int ** IndiceColonnes,int width, int height, int width_grille, int width_interface, int height_grille,int height_interface,int ** grille_user, int m, int n, int essai, char * textEssai, char * buffer, SDL_Surface * texte, SDL_Texture * texture)
 {
@@ -212,7 +207,7 @@ void AffichageLoad(SDL_Renderer * renderer, SDL_Rect * LoadBouton, int width, in
 }
 
 
-void Coloriage(SDL_Event event, SDL_Renderer * renderer, SDL_Rect Carre, int width_interface,int width_grille, int height_interface, int height_grille,int m,int n, int ** grille_user, int ** grille_user_transp)
+void Coloriage(SDL_Event event, SDL_Renderer * renderer, SDL_Rect Carre, int width_interface,int width_grille, int height_interface, int height_grille,int m,int n, int ** grille_user, int ** grille_user_transp,Tcoup_t * TabCoup)
 {
 	int ix = (int)(event.button.x-width_interface)/(width_grille/m);
 	int iy = (int)(event.button.y - height_interface)/(height_grille/n);
@@ -243,6 +238,8 @@ void Coloriage(SDL_Event event, SDL_Renderer * renderer, SDL_Rect Carre, int wid
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		}
 	}
+	MajCoup(TabCoup,iy,ix,grille_user[iy][ix]); /*grille_user[iy][ix] signifie l'état de la case*/
+	
 	grille_user_transp[ix][iy] = grille_user[iy][ix];
 	SDL_RenderFillRect(renderer, &Carre);
 	SDL_RenderPresent(renderer);

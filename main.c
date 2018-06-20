@@ -3,18 +3,19 @@
 
 int main() {
 
-	int				n,
-						m,
+	int					n,m,
 						essai=0;
 
-	int			**	grille = NULL,
+	int				**	grille = NULL,
 					**	grille_transp = NULL,
 					**	grille_user = NULL,
 					**	grille_user_transp = NULL,
 					**	IndicesColonnes = NULL,
 					**	IndicesLignes = NULL;
 
-	int				width = 400,
+	Tcoup_t			*	TabCoup = InitialiserCoup();
+
+	int					width = 400,
 						height = 400,
 						width_interface = 0.35 * width,
 						height_interface = 0.35 * height,
@@ -22,7 +23,7 @@ int main() {
 						height_grille = 0.65 * height;
 
 
-	char			textEssai[80],
+	char				textEssai[80],
 						buffer[3],
 						etat[10]="menu";
 
@@ -30,8 +31,8 @@ int main() {
 						erreur = 0;
 
 	SDL_Renderer	*	renderer;
-	SDL_Surface 	* texte = NULL;
-	SDL_Texture		* texture = NULL;
+	SDL_Surface 	*	texte = NULL;
+	SDL_Texture		*	texture = NULL;
 	SDL_Rect 			Carre;
 	SDL_Rect 			Bouton;
 	SDL_Rect			SaveLoadBouton;
@@ -109,11 +110,15 @@ int main() {
 
 	AffichageMenu(renderer,Carre,&SaveLoadBouton,font,couleurNoire,couleurRouge,width,height,texte,texture);
 
-	while (run) {
-		while (SDL_PollEvent(&event)) {
-			switch(event.type) {
+	while (run)
+	{
+		while (SDL_PollEvent(&event))
+		{
+			switch(event.type)
+			{
 				case SDL_WINDOWEVENT:
-					switch (event.window.event) {
+					switch (event.window.event)
+					{
 						case SDL_WINDOWEVENT_CLOSE:
 							run = 0;
 							break;
@@ -136,114 +141,109 @@ int main() {
 								AffichageJeu(renderer,Carre,&Bouton,&SaveLoadBouton,font,couleurNoire,couleurRouge,IndicesLignes,IndicesColonnes,width,height,width_grille,width_interface,height_grille,height_interface,grille_user,m,n,essai,textEssai,buffer,texte,texture);
 								if (strcmp(etat,"succes")==0)
 								{
-
 									Affichagetexte(texte,texture,"Success",renderer,Carre,font,couleurNoire,couleurRouge,0,0,width_interface,height_interface);
 								}
 
 							}
-						}
+					}
 							break;
 				case SDL_MOUSEBUTTONDOWN:
-					if (strcmp(etat,"succes")==0) {
+					if (strcmp(etat,"succes")==0)
+					{
 						strcpy(etat,"menu");
 						essai = 0;
 						AffichageMenu(renderer,Carre,&SaveLoadBouton,font,couleurNoire,couleurRouge,width,height,texte,texture);
 					}
 					else
+					{
+						if (strcmp(etat,"jeu")==0)
 						{
-							if (strcmp(etat,"jeu")==0)
-							{
-								if (((event.button.x-width_interface)%(width_grille/m)<=0.9*width_grille/m)&&((event.button.y-height_interface)%(height_grille/n)<=0.9*height_grille/n)&&(event.button.x<=width - (0.1 * width_grille/m))&&(event.button.y <= height - (0.1 * height_grille/n))&&(event.button.x>=width_interface)&&(event.button.y>=height_interface)) {
-									Coloriage(event, renderer,Carre,width_interface,width_grille,height_interface,height_grille,m,n,grille_user,grille_user_transp);
-								}
-								else
-								{
-									if ((event.button.x >=Bouton.x)&&(event.button.x <= Bouton.x + Bouton.w)&&(event.button.y >=Bouton.y)&&(event.button.y <=Bouton.y + Bouton.h))
-									{
-											erreur = VerificationSucces(n,m,IndicesColonnes,IndicesLignes,grille_user,grille_user_transp);
-							        if (erreur==0) {
-
-												strcpy(etat,"succes");
-
-												Affichagetexte(texte,texture,"Success",renderer,Carre,font,couleurNoire,couleurRouge,0,0,width_interface,height_interface);
-
-											}
-											else {
-												essai++;
-												sprintf(buffer,"%d",essai);
-												strcpy(textEssai,"Echecs : ");
-												strcat(textEssai, buffer);
-												Affichagetexte(texte,texture,textEssai,renderer,Carre,font,couleurNoire,couleurRouge,Bouton.x,Bouton.y+Bouton.h,Bouton.w,Bouton.h);
-											}
-									}
-									else
-									{
-										if ((event.button.x >=SaveLoadBouton.x)&&(event.button.x <= SaveLoadBouton.x + SaveLoadBouton.w)&&(event.button.y >=SaveLoadBouton.y)&&(event.button.y <=SaveLoadBouton.y + SaveLoadBouton.h))
-										{
-											Save(grille,grille_user,IndicesColonnes,IndicesLignes,width,height,n,m,essai);
-											Affichagetexte(texte,texture,"Sauvegarde !",renderer,Carre,font,couleurNoire,couleurRouge,0,0,width_interface,height_interface);
-											strcpy(etat,"succes");
-										}
-									}
-			        	}
-
+							if (((event.button.x-width_interface)%(width_grille/m)<=0.9*width_grille/m)&&((event.button.y-height_interface)%(height_grille/n)<=0.9*height_grille/n)&&(event.button.x<=width - (0.1 * width_grille/m))&&(event.button.y <= height - (0.1 * height_grille/n))&&(event.button.x>=width_interface)&&(event.button.y>=height_interface)) {
+								Coloriage(event, renderer,Carre,width_interface,width_grille,height_interface,height_grille,m,n,grille_user,grille_user_transp,TabCoup);
 							}
 							else
 							{
-								if (strcmp(etat,"menu")==0)
+								if ((event.button.x >=Bouton.x)&&(event.button.x <= Bouton.x + Bouton.w)&&(event.button.y >=Bouton.y)&&(event.button.y <=Bouton.y + Bouton.h))
+								{
+									erreur = VerificationSucces(n,m,IndicesColonnes,IndicesLignes,grille_user,grille_user_transp);
+									if (erreur==0) {
+
+											strcpy(etat,"succes");
+
+											Affichagetexte(texte,texture,"Success",renderer,Carre,font,couleurNoire,couleurRouge,0,0,width_interface,height_interface);
+
+										}
+										else {
+											essai++;
+											sprintf(buffer,"%d",essai);
+											strcpy(textEssai,"Echecs : ");
+											strcat(textEssai, buffer);
+											Affichagetexte(texte,texture,textEssai,renderer,Carre,font,couleurNoire,couleurRouge,Bouton.x,Bouton.y+Bouton.h,Bouton.w,Bouton.h);
+										}
+								}
+								else
 								{
 									if ((event.button.x >=SaveLoadBouton.x)&&(event.button.x <= SaveLoadBouton.x + SaveLoadBouton.w)&&(event.button.y >=SaveLoadBouton.y)&&(event.button.y <=SaveLoadBouton.y + SaveLoadBouton.h))
 									{
-										Load(&grille,&grille_transp,&grille_user,&grille_user_transp,&IndicesColonnes,&IndicesLignes,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m,&essai);
-										if (essai == -666)
-										{
-											Affichagetexte(texte,texture,"ERREUR DE CHARGEMENT",renderer,Carre,font,couleurNoire,couleurRouge,0,height/4,width,height/2);
-												strcpy(etat,"succes");
-										}
-										else
-										{
-											strcpy(etat,"jeu");
-										}
-
-
+										Save(grille,grille_user,IndicesColonnes,IndicesLignes,width,height,n,m,essai);
+										Affichagetexte(texte,texture,"Sauvegarde !",renderer,Carre,font,couleurNoire,couleurRouge,0,0,width_interface,height_interface);
+										strcpy(etat,"succes");
+									}
+								}
+							}
+						}
+						else
+						{
+							if (strcmp(etat,"menu")==0)
+							{
+								if ((event.button.x >=SaveLoadBouton.x)&&(event.button.x <= SaveLoadBouton.x + SaveLoadBouton.w)&&(event.button.y >=SaveLoadBouton.y)&&(event.button.y <=SaveLoadBouton.y + SaveLoadBouton.h))
+								{
+									Load(&grille,&grille_transp,&grille_user,&grille_user_transp,&IndicesColonnes,&IndicesLignes,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m,&essai);
+									if (essai == -666)
+									{
+										Affichagetexte(texte,texture,"ERREUR DE CHARGEMENT",renderer,Carre,font,couleurNoire,couleurRouge,0,height/4,width,height/2);
+											strcpy(etat,"succes");
 									}
 									else
 									{
-										if (event.button.y > height/5)
+										strcpy(etat,"jeu");
+									}
+
+
+								}
+								else
+								{
+									if (event.button.y > height/5)
+									{
+										strcpy(etat,"jeu");
+										if (event.button.x < width/3)
 										{
-											if (event.button.x < width/3)
+				
+												InitialisationVariables("Grille1.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &IndicesColonnes, &IndicesLignes,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
+										}
+										else
+										{
+											if ((event.button.x >= width/3) && (event.button.x < 2*width/3))
 											{
-													strcpy(etat,"jeu");
-													InitialisationVariables("Grille1.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &IndicesColonnes, &IndicesLignes,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
+												
+												InitialisationVariables("Grille2.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &IndicesColonnes, &IndicesLignes,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
 											}
 											else
 											{
-												if ((event.button.x >= width/3) && (event.button.x < 2*width/3))
-												{
-													strcpy(etat,"jeu");
-													InitialisationVariables("Grille2.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &IndicesColonnes, &IndicesLignes,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
-												}
-												else
-												{
-													strcpy(etat,"jeu");
-													InitialisationVariables("Grille3.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &IndicesColonnes, &IndicesLignes,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
-												}
+												
+												InitialisationVariables("Grille3.txt", &grille, &grille_transp, &grille_user, &grille_user_transp, &IndicesColonnes, &IndicesLignes,&width,&height,&width_interface,&width_grille,&height_interface,&height_grille,&n,&m);
 											}
 										}
 									}
-
-									if (strcmp(etat,"jeu")==0)
-									{
-									SDL_SetWindowSize(window, width, height);
-									font = TTF_OpenFont("arial.ttf",45*width*height/(80*n*80*m));
-									AffichageJeu(renderer,Carre,&Bouton,&SaveLoadBouton,font,couleurNoire,couleurRouge,IndicesLignes,IndicesColonnes,width,height,width_grille,width_interface,height_grille,height_interface,grille_user,m,n,essai, textEssai, buffer,texte,texture);
-									}
 								}
-
-
+								if (strcmp(etat,"jeu")==0)
+								{
+								SDL_SetWindowSize(window, width, height);
+								font = TTF_OpenFont("arial.ttf",45*width*height/(80*n*80*m));
+								AffichageJeu(renderer,Carre,&Bouton,&SaveLoadBouton,font,couleurNoire,couleurRouge,IndicesLignes,IndicesColonnes,width,height,width_grille,width_interface,height_grille,height_interface,grille_user,m,n,essai, textEssai, buffer,texte,texture);
+								}
 							}
-
-
+						}
 					}
 					break;
 				case SDL_QUIT :
@@ -254,7 +254,9 @@ int main() {
 	}
 	if(renderer)
 		SDL_DestroyRenderer(renderer);
-
+	
+	SDL_FreeSurface(texte);
+	SDL_DestroyTexture(texture);
 	/* on libere la fenetre */
 	SDL_DestroyWindow(window);
 	/* fermeture de SDL_image, SDL_ttf et SDL2 */
@@ -262,6 +264,13 @@ int main() {
 	TTF_CloseFont(font);
 	TTF_Quit();
 	SDL_Quit();
+	LibererCoups(TabCoup);
+	LibererTableau(grille,n);
+	LibererTableau(grille_transp,n);
+	LibererTableau(grille_user,n);
+	LibererTableau(grille_user_transp,n);
+	LibererTableau(IndicesLignes,n);
+	LibererTableau(IndicesColonnes,n);
 
 	return 0;
 }

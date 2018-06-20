@@ -70,6 +70,17 @@ int ** InitialiserTableau(int n, int m) {
 	return(tab);
 }
 
+void LibererTableau(int ** tab, int n) {
+	int i;
+	if (tab) {
+		for (i=0;i<n;i++) {
+			if (tab[i]) 
+				free(tab[i]);
+		}
+		free(tab);
+	}
+}
+
 int ComparerIndices(int m, int * indiceligne, int * ligne_user) {
 	int i = 0,			/*indice parcours ligne_user*/
 		j = 0, 			/*indice parcours indiceligne*/
@@ -279,3 +290,50 @@ void Load(int *** grille, int ***	grille_transp,int ***	grille_user,int ***	gril
 	}
 
 }
+
+Tcoup_t * InitialiserCoup() {
+	Tcoup_t * TabCoup = (Tcoup_t *)malloc(sizeof(Tcoup_t));
+	
+	TabCoup->sommet = 0;
+	TabCoup->base = (coup_t *)malloc(NB_COUPS_TOTAL*sizeof(coup_t));
+	
+	return TabCoup;
+}
+
+Tcoup_t * MajCoup(Tcoup_t * TabCoup, int i, int j, int etat) {
+	coup_t coup;
+	
+	coup.i = i;
+	coup.j = j;
+	coup.etat = etat;
+	
+	TabCoup->sommet++;
+	if (TabCoup->sommet > NB_COUPS_TOTAL)
+		TabCoup->sommet = 0;
+		
+	(TabCoup->base)[TabCoup->sommet] = coup;
+	
+	printf("%d, %d, %d\n",(TabCoup->base)[TabCoup->sommet].i,(TabCoup->base)[TabCoup->sommet].j,(TabCoup->base)[TabCoup->sommet].etat);
+	
+	return(TabCoup);
+}
+
+Tcoup_t * AnnulerCoup(Tcoup_t * TabCoup) {
+	
+	if (--TabCoup->sommet < 0) {
+		TabCoup->sommet = NB_COUPS_TOTAL;
+	}
+	
+	return(TabCoup);
+}
+	
+void LibererCoups(Tcoup_t * TabCoup) {
+	
+	if (TabCoup) {
+		if (TabCoup->base) {
+			free(TabCoup->base);
+		}
+		free(TabCoup);
+	}
+}
+
