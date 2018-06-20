@@ -1,5 +1,5 @@
-#ifndef JEU
-#define JEU
+#ifndef JEU_H
+#define JEU_H
 
 #include "commun.h"
 
@@ -33,16 +33,8 @@ int VerificationSucces(int n, int m, int ** IndicesColonnes, int ** IndicesLigne
 
 void InitialisationVariables(char * NomGrille,int *** grille, int ***	grille_transp,int ***	grille_user,int ***	grille_user_transp,int	***	IndicesColonnes,int ***	IndicesLignes, int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m);
 
-void Save(int ** grille,int **	grille_user,int	**	IndicesColonnes,int **	IndicesLignes, int width, int height,int n, int m, int essai);
+void Save(int **	grille_user,int	**	IndicesColonnes,int **	IndicesLignes, int width, int height,int n, int m, int essai);
 
-void Load(int *** grille, int *** grille_transp,int ***	grille_user,int ***	grille_user_transp,int	***	IndicesColonnes,int ***	IndicesLignes, int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m, int * essai);
-
-Tcoup_t * InitialiserCoup();
-
-Tcoup_t * MajCoup(Tcoup_t * TabCoup, int i, int j, int etat) ;
-
-Tcoup_t * AnnulerCoup(Tcoup_t * TabCoup);
-
-void LibererCoups(Tcoup_t * TabCoup);
+void Load(int ***	grille_user,int ***	grille_user_transp,int	***	IndicesColonnes,int ***	IndicesLignes, int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m, int * essai);
 
 #endif

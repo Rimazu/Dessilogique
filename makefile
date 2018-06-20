@@ -6,7 +6,7 @@ CFLAGS= -g -Wall -Wextra -ansi -pedantic -Wcomment -Wformat
 
 LDFLAGS= -lm -lX11 -lSDL2 -lSDL2_ttf -lSDL2_image
 
-OBJ= main.o jeu.o affichage.o
+OBJ= main.o jeu.o affichage.o commun.o
 
 EXEC= dessilogique
 
@@ -15,7 +15,7 @@ $(EXEC): $(OBJ)
 
 
 %.o: %.c
-	$(CC) -c $< $(CFLAGS) 
+	$(CC) -c $< $(CFLAGS)
 
 
 clean:

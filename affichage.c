@@ -1,8 +1,7 @@
 #include "affichage.h"
 
-void AffichageJeu(SDL_Renderer * renderer, SDL_Rect Carre, SDL_Rect * Bouton,SDL_Rect * SaveBouton,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int ** IndiceLignes,int ** IndiceColonnes,int width, int height, int width_grille, int width_interface, int height_grille,int height_interface,int ** grille_user, int m, int n, int essai, char * textEssai, char * buffer, SDL_Surface * texte, SDL_Texture * texture)
+void AffichageJeu(SDL_Renderer * renderer, SDL_Rect Carre, SDL_Rect * Bouton,SDL_Rect * SaveBouton, SDL_Rect * BoutonAnnuler,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int ** IndiceLignes,int ** IndiceColonnes,int width, int height, int width_grille, int width_interface, int height_grille,int height_interface,int ** grille_user, int m, int n, int essai, char * textEssai, char * buffer, SDL_Surface * texte, SDL_Texture * texture)
 {
-
 
 	SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
 	SDL_RenderClear(renderer);
@@ -11,7 +10,7 @@ void AffichageJeu(SDL_Renderer * renderer, SDL_Rect Carre, SDL_Rect * Bouton,SDL
 
 	AffichageBouton(renderer,Bouton,width_interface,height_interface, couleur1,font, texte, texture);
 	AffichageSave(renderer,SaveBouton,width_interface,height_interface,couleur1,font, texte, texture);
-
+	AffichageAnnuler(renderer,BoutonAnnuler,width_interface,height_interface,couleur1,font, texte, texture);
 
 	/* Écriture du texte dans la SDL_Surface texte en mode Blended (optimal) */
 	sprintf(buffer,"%d",essai);
@@ -159,6 +158,7 @@ void AffichageGrille(SDL_Renderer * renderer, SDL_Rect Carre,int width, int heig
 	}
 }
 
+
 void AffichageBouton(SDL_Renderer * renderer, SDL_Rect * Bouton, int width_interface, int height_interface, SDL_Color couleur1,TTF_Font * font, SDL_Surface * texte, SDL_Texture * texture)
 {
 	Bouton->x = width_interface/6;
@@ -171,6 +171,22 @@ void AffichageBouton(SDL_Renderer * renderer, SDL_Rect * Bouton, int width_inter
 	texte = TTF_RenderText_Blended(font, "Test", couleur1);
 	texture = SDL_CreateTextureFromSurface(renderer,texte);
 	SDL_RenderCopy(renderer, texture, NULL, Bouton);
+	SDL_RenderPresent(renderer);
+}
+
+void AffichageAnnuler(SDL_Renderer * renderer, SDL_Rect * BoutonAnnuler, int width_interface, int height_interface, SDL_Color couleur1,TTF_Font * font, SDL_Surface * texte, SDL_Texture * texture)
+{
+
+	BoutonAnnuler->x = 13*width_interface/24;
+	BoutonAnnuler->w = width_interface/3;
+	BoutonAnnuler->y = 8*height_interface/15;
+	BoutonAnnuler->h = height_interface/3;
+	SDL_SetRenderDrawColor(renderer, 0, 200, 50, 255);
+	SDL_RenderFillRect(renderer, BoutonAnnuler);
+
+	texte = TTF_RenderText_Blended(font, "Annuler", couleur1);
+	texture = SDL_CreateTextureFromSurface(renderer,texte);
+	SDL_RenderCopy(renderer, texture, NULL, BoutonAnnuler);
 	SDL_RenderPresent(renderer);
 }
 
@@ -207,10 +223,13 @@ void AffichageLoad(SDL_Renderer * renderer, SDL_Rect * LoadBouton, int width, in
 }
 
 
-void Coloriage(SDL_Event event, SDL_Renderer * renderer, SDL_Rect Carre, int width_interface,int width_grille, int height_interface, int height_grille,int m,int n, int ** grille_user, int ** grille_user_transp,Tcoup_t * TabCoup)
+void Coloriage(SDL_Event event, SDL_Renderer * renderer, SDL_Rect Carre, int width_interface,int width_grille, int height_interface, int height_grille,int m,int n, int ** grille_user, int ** grille_user_transp,Tcoup_t * TabCoup,int * CompteurCoups)
 {
 	int ix = (int)(event.button.x-width_interface)/(width_grille/m);
 	int iy = (int)(event.button.y - height_interface)/(height_grille/n);
+	
+	MajCoup(TabCoup,iy,ix,grille_user[iy][ix],CompteurCoups); /*grille_user[iy][ix] signifie l'état de la case*/
+	
 	Carre.x = ix*(width_grille/m)+width_interface;
 	printf("%d %d %d \n", ix, iy, grille_user[iy][ix]);
 	printf("%d %d \n",Carre.x, ix);
@@ -238,7 +257,6 @@ void Coloriage(SDL_Event event, SDL_Renderer * renderer, SDL_Rect Carre, int wid
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		}
 	}
-	MajCoup(TabCoup,iy,ix,grille_user[iy][ix]); /*grille_user[iy][ix] signifie l'état de la case*/
 	
 	grille_user_transp[ix][iy] = grille_user[iy][ix];
 	SDL_RenderFillRect(renderer, &Carre);

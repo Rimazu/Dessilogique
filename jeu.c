@@ -170,7 +170,7 @@ void InitialisationVariables(char * NomGrille,int *** grille, int ***	grille_tra
 }
 
 
-void Save(int ** grille,int **	grille_user,int	**	IndicesColonnes,int **	IndicesLignes, int width, int height,int n, int m, int essai)
+void Save(int **	grille_user,int	**	IndicesColonnes,int **	IndicesLignes, int width, int height,int n, int m, int essai)
 {
 	int i,j;
 	FILE * fichier = fopen("Sauvegarde.txt", "w");
@@ -179,13 +179,6 @@ void Save(int ** grille,int **	grille_user,int	**	IndicesColonnes,int **	Indices
 
 		fprintf(fichier,"%d %d %d %d %d\n",n, m, width,height,essai);
 
-		for (i=0;i<n;i++) /* écriture grille */
-		{
-			for (j=0;j<m;j++)
-			{
-				fprintf(fichier,"%d ",grille[i][j]);
-			}
-		}
 		fprintf(fichier,"\n"); /* écriture grille_user*/
 
 		for (i=0;i<n;i++)
@@ -219,7 +212,7 @@ void Save(int ** grille,int **	grille_user,int	**	IndicesColonnes,int **	Indices
 	}
 }
 
-void Load(int *** grille, int ***	grille_transp,int ***	grille_user,int ***	grille_user_transp,int	***	IndicesColonnes,int ***	IndicesLignes, int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m, int * essai)
+void Load(int ***	grille_user,int ***	grille_user_transp,int	***	IndicesColonnes,int ***	IndicesLignes, int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m, int * essai)
 {
 	int i,j;
 	FILE * fichier = fopen("Sauvegarde.txt","r");
@@ -237,23 +230,11 @@ void Load(int *** grille, int ***	grille_transp,int ***	grille_user,int ***	gril
 		*width_grille = 0.65 * (*width);
 		*height_grille = 0.65 * (*height);
 
-		*grille = InitialiserTableau(*n,*m);
-		*grille_transp = InitialiserTableau(*m,*n);
 		*grille_user = InitialiserTableau(*n,*m);
 		*grille_user_transp = InitialiserTableau(*m,*n);
 		*IndicesLignes = InitialiserTableau(*n,*m);
 		*IndicesColonnes = InitialiserTableau(*m,*n);
 
-
-		for (i=0;i<*n;i++)
-		{
-			for (j=0;j<*m;j++)
-			{
-				fscanf(fichier,"%d",(&(*grille)[i][j]));
-			}
-		}
-
-		*grille_transp = Transposer(*grille,*n,*m);
 
 		for (i=0;i<*n;i++)
 		{
@@ -287,53 +268,6 @@ void Load(int *** grille, int ***	grille_transp,int ***	grille_user,int ***	gril
 	else
 	{
 		*essai = -666;
-	}
-
-}
-
-Tcoup_t * InitialiserCoup() {
-	Tcoup_t * TabCoup = (Tcoup_t *)malloc(sizeof(Tcoup_t));
-	
-	TabCoup->sommet = 0;
-	TabCoup->base = (coup_t *)malloc(NB_COUPS_TOTAL*sizeof(coup_t));
-	
-	return TabCoup;
-}
-
-Tcoup_t * MajCoup(Tcoup_t * TabCoup, int i, int j, int etat) {
-	coup_t coup;
-	
-	coup.i = i;
-	coup.j = j;
-	coup.etat = etat;
-	
-	TabCoup->sommet++;
-	if (TabCoup->sommet > NB_COUPS_TOTAL)
-		TabCoup->sommet = 0;
-		
-	(TabCoup->base)[TabCoup->sommet] = coup;
-	
-	printf("%d, %d, %d\n",(TabCoup->base)[TabCoup->sommet].i,(TabCoup->base)[TabCoup->sommet].j,(TabCoup->base)[TabCoup->sommet].etat);
-	
-	return(TabCoup);
-}
-
-Tcoup_t * AnnulerCoup(Tcoup_t * TabCoup) {
-	
-	if (--TabCoup->sommet < 0) {
-		TabCoup->sommet = NB_COUPS_TOTAL;
-	}
-	
-	return(TabCoup);
-}
-	
-void LibererCoups(Tcoup_t * TabCoup) {
-	
-	if (TabCoup) {
-		if (TabCoup->base) {
-			free(TabCoup->base);
-		}
-		free(TabCoup);
 	}
 }
 
