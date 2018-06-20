@@ -183,7 +183,7 @@ int main() {
 											sprintf(buffer,"%d",essai);
 											strcpy(textEssai,"Echecs : ");
 											strcat(textEssai, buffer);
-											Affichagetexte(texte,texture,textEssai,renderer,Carre,font,couleurNoire,couleurRouge,Bouton.x,17*height_interface/30,Bouton.w,height_interface/3);
+											Affichagetexte(texte,texture,textEssai,renderer,Carre,font,couleurNoire,couleurRouge,Bouton.x,17*height_interface/30,Bouton.w,Bouton.h);
 						
 										}	
 								}

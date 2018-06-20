@@ -16,7 +16,7 @@ void AffichageJeu(SDL_Renderer * renderer, SDL_Rect Carre, SDL_Rect * Bouton,SDL
 	sprintf(buffer,"%d",essai);
 	strcpy(textEssai,"Echecs : ");
 	strcat(textEssai, buffer);
-	Affichagetexte(texte,texture,textEssai,renderer,Carre,font,couleur1,couleur2,Bouton->x,Bouton->y+Bouton->h,Bouton->w,Bouton->h);
+	Affichagetexte(texte,texture,textEssai,renderer,Carre,font,couleur1,couleur2,Bouton->x,17*height_interface/30,Bouton->w,height_interface/3);
 
 	/*Affichage des indices de la grille*/
 	AffichageIndiceLignes(renderer,Carre,font,couleur1,couleur2,width,height,IndiceLignes,m,n,texte,texture);
@@ -179,7 +179,7 @@ void AffichageAnnuler(SDL_Renderer * renderer, SDL_Rect * BoutonAnnuler, int wid
 
 	BoutonAnnuler->x = 13*width_interface/24;
 	BoutonAnnuler->w = width_interface/3;
-	BoutonAnnuler->y = 8*height_interface/15;
+	BoutonAnnuler->y = 17*height_interface/30;
 	BoutonAnnuler->h = height_interface/3;
 	SDL_SetRenderDrawColor(renderer, 0, 200, 50, 255);
 	SDL_RenderFillRect(renderer, BoutonAnnuler);

@@ -151,15 +151,16 @@ int VerificationSucces(int n, int m, int ** IndicesColonnes, int ** IndicesLigne
 	return(erreur);
 
 }
-
-void InitialisationVariables(char * NomGrille,int *** grille, int ***	grille_transp,int ***	grille_user,int ***	grille_user_transp,int	***	IndicesColonnes,int ***	IndicesLignes, int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m)
+/*
+void InitialisationVariables(char * NomGrille,int ** grille, int **	grille_transp,int ** grille_user,int ** grille_user_transp,int ** IndicesColonnes,int ** IndicesLignes, int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m,Tcoup_t * TabCoup,int * PCompteurCoups)
 {
-	*grille = Stocker(NomGrille, n, m);
-	*grille_transp = Transposer(*grille,*n,*m);
-	*grille_user = InitialiserTableau(*n,*m);
-	*grille_user_transp = InitialiserTableau(*m,*n);
-	*IndicesColonnes = IndiceLignes(*m,*n,*grille_transp);
-	*IndicesLignes = IndiceLignes(*n,*m,*grille);
+	grille = Stocker(NomGrille, n, m);
+	grille_transp = Transposer(*grille,*n,*m);
+	grille_user = InitialiserTableau(*n,*m);
+	grille_user_transp = InitialiserTableau(*m,*n);
+	IndicesColonnes = IndiceLignes(*m,*n,*grille_transp);
+	IndicesLignes = IndiceLignes(*n,*m,*grille);
+	TabCoup = InitialiserCoup(PCompteurCoups);
 
 	*width = 80*(*m);
 	*height = 80*(*n);
@@ -168,7 +169,7 @@ void InitialisationVariables(char * NomGrille,int *** grille, int ***	grille_tra
 	*width_grille = 0.65 * (*width);
 	*height_grille = 0.65 * (*height);
 }
-
+*/
 
 void Save(int **	grille_user,int	**	IndicesColonnes,int **	IndicesLignes, int width, int height,int n, int m, int essai)
 {
@@ -212,7 +213,7 @@ void Save(int **	grille_user,int	**	IndicesColonnes,int **	IndicesLignes, int wi
 	}
 }
 
-void Load(int ***	grille_user,int ***	grille_user_transp,int	***	IndicesColonnes,int ***	IndicesLignes, int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m, int * essai)
+void Load(int ** grille_user,int ** IndicesColonnes,int ** IndicesLignes, int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m, int * essai)
 {
 	int i,j;
 	FILE * fichier = fopen("Sauvegarde.txt","r");
@@ -230,26 +231,24 @@ void Load(int ***	grille_user,int ***	grille_user_transp,int	***	IndicesColonnes
 		*width_grille = 0.65 * (*width);
 		*height_grille = 0.65 * (*height);
 
-		*grille_user = InitialiserTableau(*n,*m);
-		*grille_user_transp = InitialiserTableau(*m,*n);
-		*IndicesLignes = InitialiserTableau(*n,*m);
-		*IndicesColonnes = InitialiserTableau(*m,*n);
+		grille_user = InitialiserTableau(*n,*m);
+		IndicesLignes = InitialiserTableau(*n,*m);
+		IndicesColonnes = InitialiserTableau(*m,*n);
 
 
 		for (i=0;i<*n;i++)
 		{
 			for (j=0;j<*m;j++)
 			{
-				fscanf(fichier,"%d",(&(*grille_user)[i][j]));
+				fscanf(fichier,"%d",&grille_user[i][j]);
 			}
 		}
-
-		*grille_user_transp = Transposer(*grille_user,*n,*m);
+		
 		for (i=0;i<*m;i++)
 		{
 			for (j=0;j<*n;j++)
 			{
-				fscanf(fichier,"%d",(&(*IndicesColonnes)[i][j]));
+				fscanf(fichier,"%d",&IndicesColonnes[i][j]);
 			}
 		}
 
@@ -257,7 +256,7 @@ void Load(int ***	grille_user,int ***	grille_user_transp,int	***	IndicesColonnes
 		{
 			for (j=0;j<*m;j++)
 			{
-				fscanf(fichier,"%d",(&(*IndicesLignes)[i][j]));
+				fscanf(fichier,"%d",&IndicesLignes[i][j]);
 			}
 		}
 
