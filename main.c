@@ -27,7 +27,7 @@ int main() {
 
 
 	char				textEssai[80],
-						buffer[3],
+						buffer[10],
 						etat[10]="menu";
 
 	int 				run = 1,
@@ -183,7 +183,6 @@ int main() {
 											strcpy(textEssai,"Echecs : ");
 											strcat(textEssai, buffer);
 											AffichageTexte(texte,texture,textEssai,renderer,carre,font,couleurNoire,couleurRouge,BoutonVerif.x,17*height_interface/30,BoutonVerif.w,height_interface/3);
-						
 										}	
 								}
 								else
