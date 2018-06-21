@@ -4,7 +4,9 @@ void AffichageTexte(SDL_Surface * texte,SDL_Texture * texture,char * chaine,SDL_
 
 	texte = TTF_RenderText_Shaded(font, chaine, couleur1,couleur2);
 	texture = SDL_CreateTextureFromSurface(renderer,texte);
-
+	
+	/* Coordonnées du rectangle encadrant le texte */
+	
 	carre.x = x;
 	carre.y = y;
 	carre.w = w;
@@ -35,32 +37,35 @@ void AffichageGrille(SDL_Renderer * renderer, SDL_Rect carre,int width, int heig
 
 void Coloriage(SDL_Event event, SDL_Renderer * renderer, SDL_Rect carre, int width_interface,int width_grille, int height_interface, int height_grille,int m,int n, int ** grille_user, int ** grille_user_transp,Tcoup_t * TabCoup,int * CompteurCoups)
 {
+	/* On trouve les indices de la case à partir de la position du clic dans la fenêtre */
 	int ix = (int)(event.button.x-width_interface)/(width_grille/m);
 	int iy = (int)(event.button.y - height_interface)/(height_grille/n);
 	
 	MajCoup(TabCoup,iy,ix,grille_user[iy][ix],CompteurCoups); /*grille_user[iy][ix] signifie l'état de la case*/
+	
+	/* coordonnées de la case à colorier à partir des indices de la case */
 	
 	carre.x = ix*(width_grille/m)+width_interface;
 	carre.w = width_grille/m * 0.9;
 	carre.y = iy*(height_grille/n)+height_interface;
 	carre.h = height_grille/n * 0.9;
 
-	if (event.button.button == SDL_BUTTON_LEFT) {
-		if (grille_user[iy][ix] == 1) {
+	if (event.button.button == SDL_BUTTON_LEFT) {		/* Clic gauche */
+		if (grille_user[iy][ix] == 1) {					/* Si la case est coloriée, on la décolore */
 			grille_user[iy][ix] = 0;
 			SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 		}
 		else {
-			grille_user[iy][ix] = 1;
+			grille_user[iy][ix] = 1;					/* Si la case est marquée ou non coloriée, on la colorie */
 			SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
 		}
 	}
-	else {
-		if (grille_user[iy][ix] == 2) {
+	else {												/* Clic droit */
+		if (grille_user[iy][ix] == 2) {					/* Si la case est marquée, on enlève la marque et rend la case non coloriée */
 			grille_user[iy][ix] = 0;
 			SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 		}
-		else {
+		else {											/* Si la case est non coloriée, on la marque*/
 			grille_user[iy][ix] = 2;
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		}
@@ -111,12 +116,13 @@ void AffichageCharg(SDL_Renderer * renderer, SDL_Rect * BoutonCharg, int width, 
 
 void AffichageJeu(SDL_Renderer * renderer, SDL_Rect carre, SDL_Rect * Bouton,SDL_Rect * SaveBouton, SDL_Rect * BoutonAnnuler,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int ** IndiceLignes,int ** IndiceColonnes,int width, int height, int width_grille, int width_interface, int height_grille,int height_interface,int ** grille_user, int m, int n, int essai, char * textEssai, char * buffer, SDL_Surface * texte, SDL_Texture * texture)
 {
-	
+	/* Coloration de l'arrière-plan de l'interface graphique du jeu */
 	SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
 	SDL_RenderClear(renderer);
 	
 	AffichageGrille(renderer,carre,width,height,width_grille,width_interface,height_grille,height_interface,grille_user, m, n);
 	
+	/* Affichage des boutons */
 	AffichageVerif(renderer,Bouton,width_interface,height_interface, couleur1,font, texte, texture);
 	AffichageSauv(renderer,SaveBouton,width_interface,height_interface,couleur1,font, texte, texture);
 	AffichageAnnuler(renderer,BoutonAnnuler,width_interface,height_interface,couleur1,font, texte, texture);
@@ -135,6 +141,7 @@ void AffichageJeu(SDL_Renderer * renderer, SDL_Rect carre, SDL_Rect * Bouton,SDL
 
 void AffichageMenu(SDL_Renderer * renderer,SDL_Rect carre,SDL_Rect * BoutonCharg,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2, int width, int height, SDL_Surface * texte, SDL_Texture * texture)
 {
+	/* Coloration de l'arrière-plan de l'interface graphique du menu */
 	SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255 );
 	SDL_RenderClear(renderer);
 
@@ -156,7 +163,6 @@ void AffichageMenu(SDL_Renderer * renderer,SDL_Rect carre,SDL_Rect * BoutonCharg
 	AffichageTexte(texte,texture,"Grille 2",renderer,carre,font,couleur1,couleur2,width*1.1/3,height*3*0.8/5,width*0.8/3,2*height*3*0.2/5);
 	AffichageTexte(texte,texture,"Grille 3",renderer,carre,font,couleur1,couleur2,width*2.1/3,height*3*0.8/5,width*0.8/3,2*height*3*0.2/5);
 	
-
 	AffichageCharg(renderer,BoutonCharg,width,height,couleur1,font,texte,texture);
 	SDL_RenderPresent(renderer);
 
@@ -165,14 +171,15 @@ void AffichageMenu(SDL_Renderer * renderer,SDL_Rect carre,SDL_Rect * BoutonCharg
 void AffichageIndice1Ligne(SDL_Renderer * renderer, SDL_Rect carre,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int width,int height, int * ligne, int m, int n, int NumLigne, SDL_Surface * texte, SDL_Texture * texture) {
 	char	indice[3]="";
 	int		i = m - 1,
-			x = 0.35 * width,
+			x = 0.35 * width, /* Coordonnées de départ d'affichage */
 			y = 0.35 * height + 0.65 * height * NumLigne / n,
-			pas = 0.7 * 2 * 0.35 * width / m;
-
+			pas = 0.7 * 2 * 0.35 * width / m; /* distance entre 2 indices affichées */
+	
 	while (i >= 0) {
 		if (ligne[i] != 0) {
 			sprintf(indice,"%d",ligne[i]);
-			x = x - pas;
+			x = x - pas; /* On se décale */
+			/* Puis on affiche l'indice */
 			AffichageTexte(texte,texture,indice,renderer,carre,font,couleur1,couleur2,x,y,pas,pas);
 		}
 		i--;
@@ -182,14 +189,15 @@ void AffichageIndice1Ligne(SDL_Renderer * renderer, SDL_Rect carre,TTF_Font * fo
 void AffichageIndice1Colonne(SDL_Renderer * renderer, SDL_Rect Carre,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int width,int height, int * colonne, int m, int n, int NumColonne, SDL_Surface * texte, SDL_Texture * texture) {
 	char	indice[3]="";
 	int		i = n - 1,
-			x = 0.35 * width + 0.65 * width * NumColonne / m,
+			x = 0.35 * width + 0.65 * width * NumColonne / m, /* Coordonnées de départ d'affichage */
 			y = 0.35 * height,
-			pas = 0.7 * 2 * 0.35 * height / n;
+			pas = 0.7 * 2 * 0.35 * height / n; /* distance entre 2 indices affichées */
 
 	while (i >= 0) {
 		if (colonne[i] != 0) {
 			sprintf(indice,"%d",colonne[i]);
-			y = y - pas;
+			y = y - pas; /* On se décale */
+			/* Puis on affiche l'indice */
 			AffichageTexte(texte,texture,indice,renderer,Carre,font,couleur1,couleur2,x,y,pas,pas);
 		}
 		i--;
@@ -199,7 +207,7 @@ void AffichageIndice1Colonne(SDL_Renderer * renderer, SDL_Rect Carre,TTF_Font * 
 
 void AffichageIndiceLignes(SDL_Renderer * renderer, SDL_Rect Carre,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int width,int height, int ** IndiceLignes, int m, int n, SDL_Surface * texte, SDL_Texture * texture) {
 	int i;
-	/* Utilise AffichageIndice1Ligne sur chaque lignes */
+	/* Utilise AffichageIndice1Ligne sur chaque ligne */
 	for (i=0; i<n; i++) {
 		AffichageIndice1Ligne(renderer,Carre,font,couleur1,couleur2,width,height,IndiceLignes[i],m,n,i,texte,texture);
 	}
@@ -207,7 +215,7 @@ void AffichageIndiceLignes(SDL_Renderer * renderer, SDL_Rect Carre,TTF_Font * fo
 
 void AffichageIndiceColonnes(SDL_Renderer * renderer, SDL_Rect Carre,TTF_Font * font,SDL_Color couleur1, SDL_Color couleur2,int width,int height, int ** IndiceColonnes, int m, int n, SDL_Surface * texte, SDL_Texture * texture) {
 	int i;
-	/* Utilise AffichageIndice1Colonne sur chaque Colonnes */
+	/* Utilise AffichageIndice1Colonne sur chaque Colonne */
 	for (i=0; i<m; i++) {
 		AffichageIndice1Colonne(renderer,Carre,font,couleur1,couleur2,width,height,IndiceColonnes[i],m,n,i,texte,texture);
 	}
