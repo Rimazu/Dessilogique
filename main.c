@@ -130,10 +130,9 @@ int main() {
 							width = event.window.data1;
 							height = event.window.data2;
 
-
 							if (strcmp(etat,"menu")==0)
 							{
-									AffichageMenu(renderer,carre,&BoutonSauvCharg,font,couleurNoire,couleurRouge,width,height,texte,texture);
+								AffichageMenu(renderer,carre,&BoutonSauvCharg,font,couleurNoire,couleurRouge,width,height,texte,texture);
 							}
 							else
 							{

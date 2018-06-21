@@ -20,8 +20,8 @@ void AffichageGrille(SDL_Renderer * renderer, SDL_Rect carre,int width, int heig
 	for (i=height_interface;i<=(height-height_grille/n);i=i+height_grille/n) {
 		for (j=width_interface;j<=(width-width_grille/m);j=j+width_grille/m) {
 
-			ix = (j-width_interface)/(width_grille/m);
-			iy = (i-height_interface)/(height_grille/n);
+			ix = (j-width_interface)/(int)(width_grille/m);
+			iy = (i-height_interface)/(int)(height_grille/n);
 
 			carre.x = j;
 			carre.w = width_grille/m * 0.9;
