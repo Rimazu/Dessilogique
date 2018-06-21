@@ -156,7 +156,7 @@ void Sauvegarde(int ** grille_user,int ** IndicesColonnes,int ** IndicesLignes,T
 			while (i!=TabCoup->sommet)					/*Parcours de la structure*/
 			{
 				temp = (TabCoup->base)[i];
-				fprintf(fichier,"YOLO %d %d %d ",temp.i,temp.j,temp.etatcase); /*Stockage des données*/
+				fprintf(fichier,"%d %d %d ",temp.i,temp.j,temp.etatcase); /*Stockage des données*/
 				i++;
 				if (i == NB_COUPS_TOTAL)				/*Si on dépasse la taille de la structure, on revient au début*/
 				{
