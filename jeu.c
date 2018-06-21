@@ -1,9 +1,8 @@
 #include "jeu.h"
 
-int ** InitialisationTableau(int n, int m) {
+int ** InitialisationTableau(int n, int m) {		/* n : nombre de lignes, m : nombre de colonnes */
 	int 	i,j;
 	int	**	T = (int **)malloc(n * sizeof(int*));
-
 	for (i=0;i<n;i++) {
 		T[i] = (int *)malloc(m * sizeof(int));
 
@@ -48,11 +47,11 @@ int ** Stockage(char * nom,int * n,int * m) {
 	if (fichier) {
 		fscanf(fichier,"%d",n);
 		fscanf(fichier,"%d",m);
-		grille = InitialisationTableau(*n,*m);
+		grille = InitialisationTableau(*n,*m);	/* Initialisation de la grille à remplir */
 
 		for (i=0;i<*n;i++) {
 			for (j=0;j<*m;j++) {
-				fscanf(fichier, "%d", &grille[i][j]);
+				fscanf(fichier, "%d", &grille[i][j]);	/* remplissage de la grille avec les valeurs lues dans le fichier */
 			}
 		}
 		fclose(fichier);
@@ -75,23 +74,23 @@ int ** IndiceLignes(int n,int m,int ** grille) {
         while (j<m) {
             indice=0;
 
-            while ((j<m)&&(0==grille[i][j])) {
+            while ((j<m)&&(0==grille[i][j])) {	/* Tant qu'il y a des zeros dans la grille, passer à l'élément suivant */
                 j++;
             }
 
-            while ((j<m)&&(1==grille[i][j])) {
+            while ((j<m)&&(1==grille[i][j])) {	/* à partir du premier 1, compter tous les 1 qui se suivent */
                 j++;
                 indice++;
             }
-            indicelign[i][compteur]=indice;
-            compteur++;
+            indicelign[i][compteur]=indice;		/* Mettre le nombre de 1 à la suite dans le tableau d'indices */
+            compteur++;							/* Passer à la succession de 1 suivante */
         }
     }
-    LiberationTableau(grille,n);
+    LiberationTableau(grille,n);				/* Libérer la grille initiale qui ne sera plus utilisée dans la suite du programme */
     return indicelign;
 }
 
-int ComparaisonIndices(int m, int * indiceligne, int * ligne_user) {
+int ComparaisonIndices(int m, int * indiceligne, int * ligne_user) {		/* Compare 1 ligne de la grille et ses indices respectifs et retourne un booléen d'erreur */
 	int i = 0,			/*indice parcours ligne_user*/
 		j = 0, 			/*indice parcours indiceligne*/
 		compteur = 0,	/*compte le nombre de cases remplies du joueur à la suite pour la comparaison avec les indices*/
@@ -102,20 +101,20 @@ int ComparaisonIndices(int m, int * indiceligne, int * ligne_user) {
 			i++;
 		}
 		compteur=0;
-		while ((i<m)&&ligne_user[i] == 1) {
+		while ((i<m)&&ligne_user[i] == 1) {	/* Compte le nombre de 1 qui se suivent et compare avec l'indice, si ils sont différent, il y a une erreur */
 			i++;
 			compteur++;
 		}
 		if (compteur != indiceligne[j]) {
 			erreur = 1;
 		}
-		j++;
+		j++;	/* On passe à la prochaine succession de 1 */
 	}
 	return (erreur);
 }
 
 
-int VerificationSucces(int n, int m, int ** IndicesColonnes, int ** IndicesLignes, int ** grille_user, int ** grille_user_transp) {
+int VerificationSucces(int n, int m, int ** IndicesColonnes, int ** IndicesLignes, int ** grille_user, int ** grille_user_transp) {	/* Execute ComparaisonIndices sur chaque lignes et colonnes et retourne un booléen d'erreur */
 	int erreur = 0;
 	int i=0;
 	int j=0;
@@ -136,7 +135,7 @@ int VerificationSucces(int n, int m, int ** IndicesColonnes, int ** IndicesLigne
 
 }
 
-void Sauvegarde(int ** grille_user,int ** IndicesColonnes,int ** IndicesLignes,Tcoup_t * TabCoup,int CompteurCoups, int width,int height,int n, int m, int essai)
+void Sauvegarde(int ** grille_user,int ** IndicesColonnes,int ** IndicesLignes,Tcoup_t * TabCoup,int CompteurCoups, int width,int height,int n, int m, int essai) /* Sauvegarde n, m, weight, height, essai, Tabcoup, urille_user, IndicesLignes et IndicesColonnes dans "Sauvegarde.txt" */
 {
 	int i,j;
 	coup_t temp;
@@ -155,7 +154,7 @@ void Sauvegarde(int ** grille_user,int ** IndicesColonnes,int ** IndicesLignes,T
 			{
 				i = i + NB_COUPS_TOTAL;
 			}
-			while (i!=TabCoup->sommet)					/*Parcours de la structure*/
+			do 				/*Parcours de la structure*/
 			{
 				temp = (TabCoup->base)[i];
 				fprintf(fichier,"%d %d %d ",temp.i,temp.j,temp.etatcase); /*Stockage des données*/
@@ -164,7 +163,7 @@ void Sauvegarde(int ** grille_user,int ** IndicesColonnes,int ** IndicesLignes,T
 				{
 					i = 0;
 				}
-			}
+			} while (i!=1+TabCoup->sommet);
 		}
 		fprintf(fichier,"\n");
 				
@@ -199,14 +198,23 @@ void Sauvegarde(int ** grille_user,int ** IndicesColonnes,int ** IndicesLignes,T
 	}
 }
 
-void Chargement(int ** grille_user,int ** IndicesColonnes,int ** IndicesLignes,Tcoup_t * TabCoup,int *PCompteurCoups, int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m, int * essai)
-{
+
+void Chargement(int *** Pgrille_user,int *** PIndicesColonnes,int *** PIndicesLignes,Tcoup_t ** PTabCoup,int *PCompteurCoups, int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m, int * essai)
+{		/* Extraie toutes les informations de "Sauvegarde.txt" */
 	int i,j;
 	coup_t temp;
 	FILE * fichier = fopen("Sauvegarde.txt","r");
 
 	if (fichier)
 	{
+		
+		/* Libération et réallocation des tableaux avec leurs nouvelles dimensions */
+		
+		LiberationTableau(*Pgrille_user,*n);
+		LiberationTableau(*PIndicesLignes,*n);
+		LiberationTableau(*PIndicesColonnes,*m);
+		LiberationCoups(*PTabCoup);
+		
 		fscanf(fichier,"%d",n);
 		fscanf(fichier,"%d",m);
 		fscanf(fichier,"%d",width);
@@ -217,29 +225,35 @@ void Chargement(int ** grille_user,int ** IndicesColonnes,int ** IndicesLignes,T
 		*height_interface = 0.35 * (*height);
 		*width_grille = 0.65 * (*width);
 		*height_grille = 0.65 * (*height);
+		
 
-		grille_user = InitialisationTableau(*n,*m);
-		IndicesLignes = InitialisationTableau(*n,*m);
-		IndicesColonnes = InitialisationTableau(*m,*n);
-		TabCoup = InitialisationCoup(PCompteurCoups);
+		
+		*Pgrille_user = InitialisationTableau(*n,*m);
+
+		*PIndicesLignes = InitialisationTableau(*n,*m);
+		*PIndicesColonnes = InitialisationTableau(*m,*n);
+		*PTabCoup = InitialisationCoup(PCompteurCoups);
 		
 		fscanf(fichier,"%d",PCompteurCoups);
+		
 		
 		for (i=0;i<*PCompteurCoups;i++)
 		{
 			fscanf(fichier,"%d",&temp.i);
 			fscanf(fichier,"%d",&temp.j);
 			fscanf(fichier,"%d",&temp.etatcase);
-			(TabCoup->base)[i] = temp;
+			((*PTabCoup)->base)[i] = temp;
 		}
-		TabCoup->sommet = *PCompteurCoups;
 		
+		(*PTabCoup)->sommet = *PCompteurCoups - 1;
+		if ((*PTabCoup)->sommet < 0)
+			(*PTabCoup)->sommet = 0;
 		
 		for (i=0;i<*n;i++)
 		{
 			for (j=0;j<*m;j++)
 			{
-				fscanf(fichier,"%d",&grille_user[i][j]);
+				fscanf(fichier,"%d",&(*Pgrille_user)[i][j]);
 			}
 		}
 		
@@ -247,15 +261,16 @@ void Chargement(int ** grille_user,int ** IndicesColonnes,int ** IndicesLignes,T
 		{
 			for (j=0;j<*n;j++)
 			{
-				fscanf(fichier,"%d",&IndicesColonnes[i][j]);
+				fscanf(fichier,"%d",&(*PIndicesColonnes)[i][j]);
 			}
 		}
+		
 
 		for (i=0;i<*n;i++)
 		{
 			for (j=0;j<*m;j++)
 			{
-				fscanf(fichier,"%d",&IndicesLignes[i][j]);
+				fscanf(fichier,"%d",&(*PIndicesLignes)[i][j]);
 			}
 		}
 

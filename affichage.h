@@ -12,7 +12,7 @@ void AffichageTexte(SDL_Surface * texte, SDL_Texture * texture,char * chaine,SDL
 
 void AffichageGrille(SDL_Renderer * renderer, SDL_Rect carre,int width, int height, int width_grille, int width_interface, int height_grille, int height_interface,int ** grille_user, int m, int n);
 
-void Coloriage(SDL_Event event, SDL_Renderer * renderer, SDL_Rect Carre, int width_interface,int width_grille, int height_interface, int height_grille,int m,int n, int ** grille_user, int ** grille_user_transp,Tcoup_t * TabCoup,int * CompteurCoups);
+void Coloriage(SDL_Event event, SDL_Renderer * renderer, SDL_Rect Carre, int width_interface,int width_grille, int height_interface, int height_grille,int m,int n, int ** grille_user, int ** grille_user_transp,Tcoup_t * TabCoup,int * CompteurCoups);		/* Permet de mettre à jour la grille utilisateur et de colorier la case de la grille en fonction du dernier coup joué */
 
 void AffichageBouton(SDL_Renderer * renderer, SDL_Rect * bouton, SDL_Color couleur1,TTF_Font * font, SDL_Surface * texte, SDL_Texture * texture, char * texte_affiche, int x, int y, int w, int h);
 

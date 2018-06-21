@@ -22,6 +22,8 @@ int VerificationSucces(int n, int m, int ** IndicesColonnes, int ** IndicesLigne
 void Sauvegarde(int ** grille_user,int **	IndicesColonnes,int ** IndicesLignes,Tcoup_t * TabCoup,int CompteurCoups,int width, int height,int n, int m, int essai);
 /*Sauvegarde les coups du joueur, la grille du joueur et les indices de la grille et autres données dans une fichier Sauvegarde.txt*/
 
-void Chargement(int ** grille_user,int ** IndicesColonnes,int ** IndicesLignes,Tcoup_t * TabCoup,int * PCompteurCoups,int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m, int * essai);
+void Chargement(int *** Pgrille_user,int *** PIndicesColonnes,int *** PIndicesLignes,Tcoup_t ** PTabCoup,int * PCompteurCoups,int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m, int * essai);
 /*Recharge une sauvegarde de Sauvegarde.txt*/
+
+
 #endif
