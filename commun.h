@@ -8,7 +8,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
-#define NB_COUPS_TOTAL 50
+#define NB_COUPS_TOTAL 20
 
 typedef struct {
 	int i;
@@ -22,13 +22,13 @@ typedef struct {
 } Tcoup_t;
 
 
-Tcoup_t * InitialiserCoup(int * PCompteurCoups);
+Tcoup_t * InitialisationCoup(int * PCompteurCoups);
 
 Tcoup_t * MajCoup(Tcoup_t * TabCoup, int i, int j, int etatcase,int * PCompteurCoups) ;
 
-Tcoup_t * AnnulerCoup(Tcoup_t * TabCoup,int * PCompteurCoups, int ** grille_user, int ** grille_user_transp,SDL_Renderer * renderer, SDL_Rect Carre,int width_interface,int width_grille, int height_interface, int height_grille,int m,int n);
+Tcoup_t * AnnulationCoup(Tcoup_t * TabCoup,int * PCompteurCoups, int ** grille_user, int ** grille_user_transp,SDL_Renderer * renderer, SDL_Rect Carre,int width_interface,int width_grille, int height_interface, int height_grille,int m,int n);
 
-void LibererCoups(Tcoup_t * TabCoup);
+void LiberationCoups(Tcoup_t * TabCoup);
 
 #endif
 

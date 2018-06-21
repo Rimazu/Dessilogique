@@ -1,6 +1,6 @@
 #include "commun.h"
 
-Tcoup_t * InitialiserCoup(int * PCompteurCoups) {
+Tcoup_t * InitialisationCoup(int * PCompteurCoups) {
 	Tcoup_t * TabCoup = (Tcoup_t *)malloc(sizeof(Tcoup_t));
 	
 	
@@ -19,30 +19,28 @@ Tcoup_t * MajCoup(Tcoup_t * TabCoup, int i, int j, int etatcase, int * PCompteur
 	coup.etatcase = etatcase;
 	
 	TabCoup->sommet++;
-	if (TabCoup->sommet > NB_COUPS_TOTAL)
+	if (TabCoup->sommet >= NB_COUPS_TOTAL)
 	{
 		TabCoup->sommet = 0;
 	}
-	else
+	if (*PCompteurCoups < NB_COUPS_TOTAL)
 	{
 		(*PCompteurCoups)++;
 	}
-		
+
 	(TabCoup->base)[TabCoup->sommet] = coup;
-	
-	printf("%d, %d, %d\n",(TabCoup->base)[TabCoup->sommet].i,(TabCoup->base)[TabCoup->sommet].j,(TabCoup->base)[TabCoup->sommet].etatcase);
 	
 	return(TabCoup);
 }
 
-Tcoup_t * AnnulerCoup(Tcoup_t * TabCoup,int * PCompteurCoups, int ** grille_user,int ** grille_user_transp, SDL_Renderer * renderer, SDL_Rect Carre,int width_interface,int width_grille, int height_interface, int height_grille,int m,int n) {
+Tcoup_t * AnnulationCoup(Tcoup_t * TabCoup,int * PCompteurCoups, int ** grille_user,int ** grille_user_transp, SDL_Renderer * renderer, SDL_Rect Carre,int width_interface,int width_grille, int height_interface, int height_grille,int m,int n) {
 	int etatcase = (TabCoup->base)[TabCoup->sommet].etatcase;
 	int i = (TabCoup->base)[TabCoup->sommet].i,
 		j = (TabCoup->base)[TabCoup->sommet].j;
 	
 	if (*PCompteurCoups > 0) {
 		(*PCompteurCoups)--;
-		printf("yolo\n");
+		
 		if (--TabCoup->sommet < 0) {
 			TabCoup->sommet = NB_COUPS_TOTAL-1;
 		}
@@ -56,7 +54,6 @@ Tcoup_t * AnnulerCoup(Tcoup_t * TabCoup,int * PCompteurCoups, int ** grille_user
 		Carre.h = height_grille/n * 0.9;
 		
 		
-		printf("%d\n",etatcase);
 		if (etatcase == 0)
 		{
 			SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
@@ -80,7 +77,7 @@ Tcoup_t * AnnulerCoup(Tcoup_t * TabCoup,int * PCompteurCoups, int ** grille_user
 	return(TabCoup);
 }
 	
-void LibererCoups(Tcoup_t * TabCoup) {
+void LiberationCoups(Tcoup_t * TabCoup) {
 	
 	if (TabCoup) {
 		if (TabCoup->base) {

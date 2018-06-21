@@ -3,38 +3,25 @@
 
 #include "commun.h"
 
-/*Renvoie le tableau qui contient les indices des lignes de la grille*/
-int ** IndiceLignes(int n,int m,int ** grille);
+/*Fonctions générales de gestion de matrice*/
+int ** InitialisationTableau(int,int);				/*Initialise un tableau*/
 
-/*Renvoie le tableau qui contient les indices des colonnes de la grille
-int ** IndiceColonnes(int n,int m,int ** grille);*/
+int ** Transposee(int ** T, int n, int m);		/*Renvoie la transposee d'une matrice*/
 
+void LiberationTableau(int ** T,int n);			/*Libère le tableau*/
 
-/*Stocke la matrice du fichier dans un tableau*/
-int ** Stocker(char *,int*,int*);
+/*Fonctions pour le moteur du jeu*/
+int ** Stockage(char * nom,int * n,int * m);		/*Stocke la matrice du fichier dans un tableau*/
 
-/*Initialise un tableau*/
-int ** InitialiserTableau(int,int);
+int ** IndiceLignes(int n,int m,int ** grille); /*Renvoie le tableau qui contient les indices des lignes de la grille*/
 
-/*Libère le tableau*/
-void LibererTableau(int **,int);
+int ComparaisonIndices(int n, int * indiceligne, int * ligne_user); /*Compare la ligne des indices et celle du joueur (pour ligne : mettre m, pour colonne : mettre n)*/
 
-/*Compare la ligne des indices et celle du joueur (pour ligne : mettre m, pour colonne : mettre n)*/
-int ComparerIndices(int n, int * indiceligne, int * ligne_user);
+int VerificationSucces(int n, int m, int ** IndicesColonnes, int ** IndicesLignes, int ** grille_user, int ** grille_user_transp); /*Compare le résultat avec la solution */
 
-/*Affiche les elements d'un tableau*/
-void Afficher(int **T, int n,int m);
+void Sauvegarde(int ** grille_user,int **	IndicesColonnes,int ** IndicesLignes,Tcoup_t * TabCoup,int CompteurCoups,int width, int height,int n, int m, int essai);
+/*Sauvegarde les coups du joueur, la grille du joueur et les indices de la grille et autres données dans une fichier Sauvegarde.txt*/
 
-/*Renvoie la transposee d'une matrice*/
-int ** Transposer(int ** T, int n, int m);
-
-/*Compare le résultat avec la solution */
-int VerificationSucces(int n, int m, int ** IndicesColonnes, int ** IndicesLignes, int ** grille_user, int ** grille_user_transp);
-
-void InitialisationVariables(char * NomGrille,int ** grille, int **	grille_transp,int **	grille_user,int **	grille_user_transp,int	**	IndicesColonnes,int **	IndicesLignes, int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m,Tcoup_t * TabCoup, int * PCompteurCoups);
-
-void Save(int ** grille_user,int **	IndicesColonnes,int ** IndicesLignes, int width, int height,int n, int m, int essai);
-
-void Load(int ** grille_user,int ** IndicesColonnes,int ** IndicesLignes, int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m, int * essai);
-
+void Chargement(int ** grille_user,int ** IndicesColonnes,int ** IndicesLignes,Tcoup_t * TabCoup,int * PCompteurCoups,int * width, int * height, int * width_interface,int * width_grille, int * height_interface, int * height_grille, int * n, int * m, int * essai);
+/*Recharge une sauvegarde de Sauvegarde.txt*/
 #endif
